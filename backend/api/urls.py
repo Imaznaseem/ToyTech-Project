@@ -1,7 +1,7 @@
 from django.urls import path
-from . import views
+from .views import WorkshopListCreate, BookingCreate
 
 urlpatterns = [
-    path("notes/", views.NoteListCreate.as_view(), name="note-list"),
-    path("notes/delete/<int:pk>/", views.NoteDelete.as_view(), name="delete-note"),
+    path('workshops/', WorkshopListCreate.as_view(), name='workshop-list-create'),
+    path('bookings/', BookingCreate.as_view(), name='booking-create'),
 ]

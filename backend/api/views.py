@@ -1,36 +1,28 @@
-from django.shortcuts import render
-from django.contrib.auth.models import User
-from rest_framework import generics
-from .serializers import UserSerializer, NoteSerializer
-from rest_framework.permissions import IsAuthenticated, AllowAny
-from .models import Note
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from .models import Workshop, Booking
+from .serializers import WorkshopSerializer, BookingSerializer
 
+class WorkshopListCreate(APIView):
+    def get(self, request):
+        workshops = Workshop.objects.all()
+        serializer = WorkshopSerializer(workshops, many=True)
+        return Response(serializer.data)
 
-class NoteListCreate(generics.ListCreateAPIView):
-    serializer_class = NoteSerializer
-    permission_classes = [IsAuthenticated]
-
-    def get_queryset(self):
-        user = self.request.user
-        return Note.objects.filter(author=user)
-
-    def perform_create(self, serializer):
+    def post(self, request):
+        serializer = WorkshopSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save(author=self.request.user)
-        else:
-            print(serializer.errors)
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class BookingCreate(APIView):
+    def post(self, request):
+        serializer = BookingSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            # Send email to owner for negotiation (implement email sending logic)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class NoteDelete(generics.DestroyAPIView):
-    serializer_class = NoteSerializer
-    permission_classes = [IsAuthenticated]
-
-    def get_queryset(self):
-        user = self.request.user
-        return Note.objects.filter(author=user)
-
-
-class CreateUserView(generics.CreateAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
-    permission_classes = [AllowAny]
