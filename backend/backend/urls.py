@@ -3,7 +3,8 @@ from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
-    path('admin/', admin.site.urls),  # Django Admin
-    path('api/', include('api.urls')),  # Include the URLs from the Api app
+    path('admin/', admin.site.urls),
+    path("api/", include("api.urls")),  
+    path("api-auth/", include("rest_framework.urls")), 
 ]
 
