@@ -1,9 +1,10 @@
 from django.urls import path
-from .views import CreateUserView, WorkshopBookingListCreate, WorkshopList
+from .routes.user_views import CreateUserView, LoginView, LogoutView, UserProfileView
 
 urlpatterns = [
-    path('user/register/', CreateUserView.as_view(), name='register'),
-    path('workshops/', WorkshopList.as_view(), name='workshop-list'),
-    path('bookings/', WorkshopBookingListCreate.as_view(), name='workshop-booking'),
+    # Användarrelaterade rutter
+    path("user/register/", CreateUserView.as_view(), name="register"),
+    path("user/login/", LoginView.as_view(), name="login"),
+    path("user/logout/", LogoutView.as_view(), name="logout"),
+    path("user/profile/", UserProfileView.as_view(), name="profile"),
 ]
-
