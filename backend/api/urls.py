@@ -1,10 +1,19 @@
+# api/urls.py
 from django.urls import path
-from .routes.user_views import CreateUserView, LoginView, LogoutView, UserProfileView
+from api.views.employees_views import (
+    RegisterEmployeeView,
+    EmployeeDashboardView,
+    EmployeeLoginView,
+    EmployeeLogoutView,
+    EmployeeProfileView,
+)
+from .views.workshop_views import WorkshopListView
 
 urlpatterns = [
-    # Användarrelaterade rutter
-    path("user/register/", CreateUserView.as_view(), name="register"),
-    path("user/login/", LoginView.as_view(), name="login"),
-    path("user/logout/", LogoutView.as_view(), name="logout"),
-    path("user/profile/", UserProfileView.as_view(), name="profile"),
+    path("workshops/", WorkshopListView.as_view(), name="workshop-list"),
+    path("employee/register/", RegisterEmployeeView.as_view(), name="employee-register"),
+    path("employee/dashboard/", EmployeeDashboardView.as_view(), name="employee-dashboard"),
+    path("employee/login/", EmployeeLoginView.as_view(), name="employee-login"),
+    path("employee/logout/", EmployeeLogoutView.as_view(), name="employee-logout"),
+    path("employee/profile/", EmployeeProfileView.as_view(), name="employee-profile"),
 ]

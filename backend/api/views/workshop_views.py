@@ -4,6 +4,6 @@ from rest_framework import generics
 from ..serializers import WorkshopSerializer
 from ..models import Workshop
 
-class WorkshopList(generics.ListAPIView):
+class WorkshopListView(generics.ListAPIView):
     queryset = Workshop.objects.all()
     serializer_class = WorkshopSerializer
