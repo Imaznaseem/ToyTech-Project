@@ -1,129 +1,132 @@
 // components/Dashboard.jsx
 
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import logo from '../assets/logo.png'; // Adjust the path to where your image is stored
+import React from 'react';
+import Navbar from './Navbar'; // Import the Navbar component
 
-const Dashboard = ({ isAuthenticated }) => {
-  const [workshops, setWorkshops] = useState([]);
-  const [authView, setAuthView] = useState(false);
-
-  useEffect(() => {
-    // Fetch workshops data when component mounts
-    const fetchWorkshops = async () => {
-      try {
-        const response = await axios.get('http://127.0.0.1:8000/api/workshops/');
-        setWorkshops(response.data);
-      } catch (error) {
-        console.error("Error fetching workshops:", error);
-      }
-    };
-
-    fetchWorkshops();
-
-    // Set authenticated view if the user is authenticated
-    if (isAuthenticated) {
-      setAuthView(true);
-    }
-  }, [isAuthenticated]);
-
+const Dashboard = () => {
   return (
     <div style={styles.container}>
-      <div style={styles.header}>
-        <img src={logo} alt="ToyTech Logo" style={styles.logo} />
-        <h1 style={styles.title}>
+      <Navbar /> {/* Navbar at the top of the dashboard */}
+      
+      {/* Home Section */}
+      <section id="home" style={styles.section}>
+        <p style={styles.description}>
           Upptäck våra interaktiva STEM-workshops som inspirerar barn att utforska teknik och kreativitet genom lek!
-        </h1>
-      </div>
+        </p>
+      </section>
 
-      {/* Content for authenticated users */}
-      {authView ? (
-        <div style={styles.authContent}>
-          <h2>Welcome, authenticated user!</h2>
-          <p>This is a special view only visible to logged-in users.</p>
-        </div>
-      ) : (
-        <p>You are viewing as a guest. Please log in to see additional content.</p>
-      )}
-
-      {/* Displaying workshops */}
+      {/* Workshops Section */}
       <div style={styles.workshopsContainer}>
-        {workshops.map((workshop) => (
-          <div key={workshop.id} style={styles.workshopCard}>
-            <h3>{workshop.title}</h3>
-            <p>{workshop.description}</p>
-            <p>Location: {workshop.location}</p>
-            <p>Available Slots: {workshop.available_slots}</p>
-            <p>Date: {workshop.date}</p>
-            <p>Time: {workshop.time}</p>
-            <button style={styles.button}>Läs mer</button>
-          </div>
-        ))}
+        <div style={styles.workshopBox}>
+          <button style={styles.button}>Läs mer</button>
+        </div>
+        <div style={styles.workshopBox}>
+          <button style={styles.button}>Läs mer</button>
+        </div>
+        <div style={styles.workshopBox}>
+          <button style={styles.button}>Läs mer</button>
+        </div>
       </div>
+
+      {/* About Us Section */}
+      <section id="about-us" style={styles.section}>
+        <h2 style={styles.heading}>Om oss</h2>
+        <p style={styles.infoText}>
+          ToyTech är dedikerat till att skapa interaktiva och lärorika workshops för barn. Vi fokuserar på att uppmuntra kreativitet och teknisk förståelse genom lekfulla och engagerande aktiviteter.
+        </p>
+      </section>
+
+      {/* Contact Section */}
+      <section id="contact" style={styles.section}>
+        <h2 style={styles.heading}>Contact</h2>
+        <p style={styles.infoText}>Phone: +46 123 456 789</p>
+        <p style={styles.infoText}>Email: info@toytech.com</p>
+        <p style={styles.infoText}>
+          <a href="https://instagram.com/toytech" target="_blank" rel="noopener noreferrer">
+            Instagram
+          </a>
+          {' | '}
+          <a href="https://linkedin.com/company/toytech" target="_blank" rel="noopener noreferrer">
+            LinkedIn
+          </a>
+        </p>
+      </section>
     </div>
   );
 };
 
 const styles = {
-  container: {
-    backgroundColor: '#e0e7ff',
-    padding: '20px',
-    width: '100vw',
-    height: '100vh',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    overflowX: 'hidden',
-    boxSizing: 'border-box',
-  },
-  header: {
-    textAlign: 'center',
-    marginBottom: '20px',
-    maxWidth: '80%',
-  },
-  logo: {
-    width: '50%',  // Set width as a percentage of the parent container
-    height: 'auto',
-    marginBottom: '10px',
-  },
-  title: {
-    fontSize: '1.8rem',
-    color: '#333',
-    maxWidth: '600px',
-    margin: '0 auto',
-    textAlign: 'center',
-  },
-  authContent: {
-    marginBottom: '20px',
-    textAlign: 'center',
-  },
-  workshopsContainer: {
-    display: 'flex',
-    gap: '20px',
-    justifyContent: 'center',
-    flexWrap: 'wrap',
-    width: '100%',
-    maxWidth: '1200px',
-  },
-  workshopCard: {
-    backgroundColor: '#f0f4ff',
-    padding: '15px',
-    borderRadius: '8px',
-    width: '200px',
-    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-    textAlign: 'center',
-    marginBottom: '20px',
-  },
-  button: {
-    backgroundColor: '#1a73e8',
-    color: 'white',
-    border: 'none',
-    padding: '8px 16px',
-    borderRadius: '4px',
-    cursor: 'pointer',
-    marginTop: '10px',
-  },
-};
-
+    container: {
+      paddingTop: '80px', // Space for the Navbar height
+      background: 'linear-gradient(180deg, #7587C1 0%, #FFFFFF 100%)',
+      textAlign: 'center',
+    },
+    section: {
+      padding: '60px 20px',
+    },
+    description: {
+      fontFamily: "'Newsreader', serif",
+      fontStyle: 'normal',
+      fontWeight: '400',
+      fontSize: '36px',
+      lineHeight: '120%',
+      textAlign: 'center',
+      letterSpacing: '-0.02em',
+      color: '#FFF9F9',
+      marginBottom: '50px',
+      maxWidth: '800px',
+      margin: '0 auto', // Center the text within its container
+    },
+    workshopsContainer: {
+      display: 'flex',
+      justifyContent: 'center',
+      gap: '20px',
+      width: '100%',
+      maxWidth: '1200px',
+      padding: '0 20px',
+      marginBottom: '60px', // Add margin for better spacing
+    },
+    workshopBox: {
+      width: '250px',
+      height: '400px',
+      background: '#FFF9F9',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'space-between', // Use space-between to place items at top and bottom
+      padding: '20px', // Add padding for inner spacing
+      borderRadius: '8px',
+      boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
+    },
+    button: {
+      alignSelf: 'center', // Center button horizontally
+      width: '173px',
+      height: '40px', // Increase height for better vertical alignment
+      fontFamily: "'Inter', sans-serif",
+      fontWeight: '600',
+      fontSize: '20px',
+      lineHeight: '130%',
+      color: '#FFFFFF',
+      backgroundColor: '#1F476B',
+      border: 'none',
+      borderRadius: '8px',
+      cursor: 'pointer',
+      display: 'flex',
+      alignItems: 'center', // Center text vertically
+      justifyContent: 'center', // Center text horizontally
+      marginTop: 'auto', // Push button to the bottom
+    },
+    heading: {
+      fontSize: '32px',
+      fontWeight: 'bold',
+      color: '#333',
+      marginBottom: '20px',
+    },
+    infoText: {
+      fontSize: '18px',
+      color: '#333',
+      marginBottom: '10px',
+    },
+  };
+  
 export default Dashboard;
