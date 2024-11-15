@@ -17,15 +17,9 @@ const Dashboard = () => {
 
       {/* Workshops Section */}
       <div style={styles.workshopsContainer}>
-        <div style={styles.workshopBox}>
-          <button style={styles.button}>Läs mer</button>
-        </div>
-        <div style={styles.workshopBox}>
-          <button style={styles.button}>Läs mer</button>
-        </div>
-        <div style={styles.workshopBox}>
-          <button style={styles.button}>Läs mer</button>
-        </div>
+        <div style={styles.workshopBox}></div>
+        <div style={styles.workshopBox}></div>
+        <div style={styles.workshopBox}></div>
       </div>
 
       {/* About Us Section */}
