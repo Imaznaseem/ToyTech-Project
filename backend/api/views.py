@@ -1,8 +1,25 @@
 from django.contrib.auth.models import User
-from rest_framework import generics
+from rest_framework import generics, status
 from rest_framework.permissions import IsAuthenticated, AllowAny  
 from .serializers import UserSerializer, WorkshopBookingSerializer, WorkshopSerializer
 from .models import WorkshopBooking, Workshop
+from rest_framework.response import Response
+from .models import BookingDate  
+from .serializers import BookingDateSerializer
+from .permissions import IsAdminUser
+from rest_framework.views import APIView
+
+class AddBookingDateView(generics.CreateAPIView):
+    queryset = BookingDate.objects.all()
+    serializer_class = BookingDateSerializer
+    permission_classes = [IsAdminUser]
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class CreateUserView(generics.CreateAPIView):
     queryset = User.objects.all()
@@ -28,4 +45,9 @@ class WorkshopList(generics.ListAPIView):
     queryset = Workshop.objects.all()
     serializer_class = WorkshopSerializer
 
+class UserStatusView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        return Response({"is_staff": request.user.is_staff})
 

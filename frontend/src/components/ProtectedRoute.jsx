@@ -1,42 +1,47 @@
 import { Navigate } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";
+import { useState, useEffect } from "react";
 import api from "../api";
 import { REFRESH_TOKEN, ACCESS_TOKEN } from "../constants";
-import { useState, useEffect } from "react";
-
+import Cookies from "js-cookie";  // Prefer cookies for secure token storage
 
 function ProtectedRoute({ children }) {
     const [isAuthorized, setIsAuthorized] = useState(null);
 
     useEffect(() => {
-        auth().catch(() => setIsAuthorized(false))
-    }, [])
+        auth().catch(() => handleUnauthorized());
+    }, []);
+
+    const handleUnauthorized = () => {
+        Cookies.remove(ACCESS_TOKEN);
+        Cookies.remove(REFRESH_TOKEN);
+        setIsAuthorized(false);
+    };
 
     const refreshToken = async () => {
-        const refreshToken = localStorage.getItem(REFRESH_TOKEN);
+        const refreshToken = Cookies.get(REFRESH_TOKEN);
         try {
             const res = await api.post("/api/token/refresh/", {
                 refresh: refreshToken,
             });
             if (res.status === 200) {
-                localStorage.setItem(ACCESS_TOKEN, res.data.access)
-                setIsAuthorized(true)
+                Cookies.set(ACCESS_TOKEN, res.data.access, { secure: true, sameSite: 'Strict' });
+                setIsAuthorized(true);
             } else {
-                setIsAuthorized(false)
+                handleUnauthorized();
             }
         } catch (error) {
-            console.log(error);
-            setIsAuthorized(false);
+            console.error("Failed to refresh token:", error);
+            handleUnauthorized();
         }
     };
 
     const auth = async () => {
-        const token = localStorage.getItem(ACCESS_TOKEN);
+        const token = Cookies.get(ACCESS_TOKEN);
         if (!token) {
             setIsAuthorized(false);
             return;
         }
-        const decoded = jwtDecode(token);
+        const decoded = JSON.parse(atob(token.split('.')[1])); // Decode payload safely
         const tokenExpiration = decoded.exp;
         const now = Date.now() / 1000;
 
@@ -54,4 +59,4 @@ function ProtectedRoute({ children }) {
     return isAuthorized ? children : <Navigate to="/login" />;
 }
 
-export default ProtectedRoute; 
+export default ProtectedRoute;

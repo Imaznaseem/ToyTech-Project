@@ -1,7 +1,13 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import WorkshopBooking, Workshop
+from .models import WorkshopBooking, Workshop, BookingDate
 
+
+class BookingDateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BookingDate
+        fields = '__all__'  # This includes all fields in the BookingDate model
+        
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
 
@@ -34,4 +40,5 @@ class WorkshopBookingSerializer(serializers.ModelSerializer):
             'email', 'phone_number', 'number_of_attendees', 'additional_message', 'created_at', 'is_confirmed'
         ]
         read_only_fields = ['user', 'is_confirmed', 'created_at']
+
 

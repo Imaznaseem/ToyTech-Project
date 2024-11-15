@@ -3,6 +3,13 @@ from django.contrib.auth.models import User
 from django.core.mail import send_mail
 from django.conf import settings
 
+class BookingDate(models.Model):
+    date = models.DateField()
+    available_slots = models.IntegerField()  # Example field for available slots
+    location = models.CharField(max_length=255)  # Example field for location
+
+    def __str__(self):
+        return f"{self.date} - {self.location}"
 
 class Workshop(models.Model):
     title = models.CharField(max_length=200)
