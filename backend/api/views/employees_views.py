@@ -18,6 +18,23 @@ class RegisterEmployeeView(generics.CreateAPIView):
     serializer_class = UserSerializer
     permission_classes = [AllowAny]  # Allow anyone to access the registration
 
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            user = serializer.save()  # Spara användaren om all validering går igenom
+            return Response(
+                {
+                    "message": "Registration successful",
+                    "user": {
+                        "username": user.username,
+                        "email": user.email
+                    }
+                },
+                status=status.HTTP_201_CREATED
+            )
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 class EmployeeDashboardView(APIView):
     """
     View for employee dashboard, only accessible to authenticated users.
@@ -35,15 +52,33 @@ class EmployeeLoginView(APIView):
     permission_classes = [AllowAny]  # Allow anyone to access the login
 
     def post(self, request):
+        # Extract username and password from the request body
         username = request.data.get("username")
         password = request.data.get("password")
-        
+
+        # Check if username and password are provided
+        if not username or not password:
+            return Response(
+                {"detail": "Username and password are required."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        # Authenticate the user
         user = authenticate(request, username=username, password=password)
+
+        # If user is valid, log them in
         if user is not None:
-            login(request, user)  # Create a session
-            return Response({"detail": "Login successful"}, status=status.HTTP_200_OK)
-        else:
-            return Response({"detail": "Invalid username or password"}, status=status.HTTP_400_BAD_REQUEST)
+            login(request, user)
+            return Response(
+                {"detail": "Login successful", "username": user.username},
+                status=status.HTTP_200_OK,
+            )
+
+        # Return error if authentication fails
+        return Response(
+            {"detail": "Invalid username or password"},
+            status=status.HTTP_401_UNAUTHORIZED,
+        )
 
 class EmployeeLogoutView(APIView):
     """

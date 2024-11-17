@@ -26,7 +26,11 @@ const Dashboard = () => {
       <section id="about-us" style={styles.section}>
         <h2 style={styles.heading}>Om oss</h2>
         <p style={styles.infoText}>
-          ToyTech är dedikerat till att skapa interaktiva och lärorika workshops för barn. Vi fokuserar på att uppmuntra kreativitet och teknisk förståelse genom lekfulla och engagerande aktiviteter.
+        Vi är passionerade läkar- och ingenjörsstudenter som erbjuder 
+        interaktiva workshops för att inspirera unga att utforska teknikens värld. 
+        Genom praktiska och engagerande aktiviteter väcker vi intresse för vetenskap, 
+        teknik, ingenjörskonst och matematik (STEM). 
+        Välkommen till ToyTech, där vi tillsammans formar en framtid av innovatörer!
         </p>
       </section>
 
