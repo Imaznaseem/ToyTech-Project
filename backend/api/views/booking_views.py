@@ -32,20 +32,20 @@ class WorkshopBookingListView(generics.ListAPIView):
 
 
 class WorkshopBookingRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
-    """
-    View to retrieve, update, or delete a specific booking for authenticated users.
-    """
     serializer_class = WorkshopBookingSerializer
-    permission_classes = [permissions.IsAuthenticated]  # Only authenticated users
+    permission_classes = [permissions.IsAuthenticated]  # Endast autentiserade användare
     lookup_field = "pk"
 
     def get_queryset(self):
-        # Ensure users can only interact with their bookings
+        # Tillåt bara åtkomst till bokningar kopplade till användarens e-post
         return WorkshopBooking.objects.filter(email=self.request.user.email)
 
     def perform_update(self, serializer):
-        # Perform update logic
-        serializer.save()
+        booking = serializer.save()
+        if 'is_confirmed' in serializer.validated_data and serializer.validated_data['is_confirmed']:
+            # Skicka notifiering när en bokning bekräftas
+            booking.send_notification_to_admin()
+
 
     def perform_destroy(self, instance):
         # Perform delete logic

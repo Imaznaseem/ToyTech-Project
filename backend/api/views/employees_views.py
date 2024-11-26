@@ -34,6 +34,28 @@ class RegisterEmployeeView(generics.CreateAPIView):
             )
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+class UpdateEmployeeView(APIView):
+    permission_classes = [IsAuthenticated]  # Bara inloggade användare
+
+    def patch(self, request):
+        user = request.user  # Hämta inloggad användare
+        data = request.data
+        if "email" in data:
+            user.email = data["email"]
+        if "password" in data:
+            user.set_password(data["password"])  # Hashar lösenord
+        user.save()
+        return Response({"detail": "User updated successfully"}, status=status.HTTP_200_OK)
+    
+class DeleteEmployeeView(APIView):
+    permission_classes = [IsAuthenticated]  # Bara inloggade användare
+
+    def delete(self, request):
+        user = request.user
+        user.delete()
+        return Response({"detail": "User deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
+
 
 class EmployeeDashboardView(APIView):
     """

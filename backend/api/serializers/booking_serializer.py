@@ -9,5 +9,7 @@ class WorkshopBookingSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'workshop', 'contact_name', 'organization_name',
             'organization_type', 'email', 'phone_number',
-            'number_of_attendees', 'additional_message', 'created_at', 'is_confirmed'
+            'number_of_attendees', 'additional_message',
+            'created_at', 'is_confirmed', 'workshop_date'
         ]
+
