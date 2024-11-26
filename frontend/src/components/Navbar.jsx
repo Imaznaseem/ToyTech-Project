@@ -2,7 +2,7 @@ import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { Box, Flex, Button, Image } from '@chakra-ui/react';
 import { Link as ScrollLink } from 'react-scroll';
-import logo from '../assets/logo.png';
+import logo from '../assets/logo1.png';
 
 const Navbar = () => {
   return (
@@ -20,7 +20,7 @@ const Navbar = () => {
         {/* Logo with Rounded Corners */}
         <Flex align="center" flex="1">
           <RouterLink to="/">
-            <Image src={logo} alt="ToyTech Logo" height="40px" borderRadius="20px" />
+            <Image src={logo} alt="ToyTech Logo" height="60px" borderRadius="30px" />
           </RouterLink>
         </Flex>
 
