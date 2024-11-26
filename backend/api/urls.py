@@ -2,6 +2,8 @@
 from django.urls import path
 from api.views.employees_views import (
     RegisterEmployeeView,
+    UpdateEmployeeView,
+    DeleteEmployeeView,
     EmployeeDashboardView,
     EmployeeLoginView,
     EmployeeLogoutView,
@@ -28,6 +30,8 @@ urlpatterns = [
     path("workshops/<int:pk>/", WorkshopDetailView.as_view(), name="workshop-detail"),
     
     path("employee/register/", RegisterEmployeeView.as_view(), name="employee-register"),
+    path("employee/update/", UpdateEmployeeView.as_view(), name="employee-update"),
+    path("employee/delete/", DeleteEmployeeView.as_view(), name="employee-delete"),
     path("employee/dashboard/", EmployeeDashboardView.as_view(), name="employee-dashboard"),
     path("employee/login/", EmployeeLoginView.as_view(), name="employee-login"),
     path("employee/logout/", EmployeeLogoutView.as_view(), name="employee-logout"),
