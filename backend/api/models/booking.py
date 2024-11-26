@@ -20,6 +20,7 @@ class WorkshopBooking(models.Model):
     number_of_attendees = models.PositiveIntegerField()
     additional_message = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    workshop_date = models.DateTimeField()
     is_confirmed = models.BooleanField(default=False)  # Whether the booking has been confirmed
 
     def __str__(self):
