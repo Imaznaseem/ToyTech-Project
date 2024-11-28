@@ -40,6 +40,19 @@ const Navbar = () => {
               Home
             </Button>
           </ScrollLink>
+
+          <ScrollLink to="workshops-section" smooth={true} duration={500}>
+            <Button 
+            bg="#0F3986"
+            color="white"
+            _hover={{ bg: "#104470" }}
+            borderRadius="md"
+            px={4}
+            >
+              Workshops
+            </Button>
+          </ScrollLink>
+
           <ScrollLink to="about-us" smooth={true} duration={500} offset={-70}>
             <Button
               bg="#0F3986"

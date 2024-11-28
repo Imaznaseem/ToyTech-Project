@@ -33,7 +33,7 @@ const Dashboard = () => {
       </section>
 
       {/* Workshops Section */}
-      <div style={styles.workshopsContainer}>
+      <div id="workshops-section" style={styles.workshopsContainer}>
         {workshops.map((workshop, index) => (
           <div
             key={workshop.id}
@@ -121,7 +121,7 @@ const styles = {
     lineHeight: '120%',
     textAlign: 'center',
     letterSpacing: '-0.02em',
-    color: '#FFF9F9',
+    color: 'black',
     marginBottom: '50px',
     maxWidth: '800px',
     margin: '0 auto',
@@ -214,7 +214,7 @@ const styles = {
     fontSize: '24px',
     fontWeight: 'bold',
     margin: '20px 0 10px',
-    color: '#1F476B',
+    color: '#333',
   },
 };
 
