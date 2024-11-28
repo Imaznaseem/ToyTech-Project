@@ -8,8 +8,8 @@ const Navbar = () => {
   return (
     <Box
       as="nav"
-      bg="linear-gradient(90deg, rgba(21, 66, 104, 1) 0%, rgba(31, 71, 107, 1) 100%)"
-      color="white"
+      bg="rgba(0, 0, 35, 0.8)"
+      color="#010E4A"
       p={4}
       position="fixed"
       width="100%"
@@ -17,10 +17,13 @@ const Navbar = () => {
       zIndex={1000}
     >
       <Flex alignItems="center" justifyContent="center" maxW="1200px" mx="auto">
-        {/* Logo with Rounded Corners */}
+        {/* Logo and text */}
         <Flex align="center" flex="1">
-          <RouterLink to="/">
+          <RouterLink to="/" style={{ display: 'flex', alignItems: 'center' }}>
             <Image src={logo} alt="ToyTech Logo" height="60px" borderRadius="30px" />
+            <span style={{ marginLeft: '10px', fontSize: '1.5rem', fontWeight: 'bold', color: 'WHITE' }}>
+              ToyTech
+            </span>
           </RouterLink>
         </Flex>
 
@@ -28,7 +31,7 @@ const Navbar = () => {
         <Flex gap={30} justifyContent="center" flex="2">
           <ScrollLink to="home" smooth={true} duration={500} offset={-70}>
             <Button
-              bg="#185F99"
+              bg="#0F3986"
               color="white"
               _hover={{ bg: "#104470" }}
               borderRadius="md"
@@ -39,7 +42,7 @@ const Navbar = () => {
           </ScrollLink>
           <ScrollLink to="about-us" smooth={true} duration={500} offset={-70}>
             <Button
-              bg="#185F99"
+              bg="#0F3986"
               color="white"
               _hover={{ bg: "#104470" }}
               borderRadius="md"
@@ -50,7 +53,7 @@ const Navbar = () => {
           </ScrollLink>
           <ScrollLink to="contact" smooth={true} duration={500} offset={-70}>
             <Button
-              bg="#185F99"
+              bg="#0F3986"
               color="white"
               _hover={{ bg: "#104470" }}
               borderRadius="md"

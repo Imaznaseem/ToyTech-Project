@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import Navbar from './Navbar'; // Import the Navbar component
+import Navbar from '../components/Navbar'; // Import the Navbar component
+import technologyImage from '../assets/technology1.png'; // Import the technology image
+import engineeringImage from '../assets/engineering.png'; // Import the engineering image
 
 const Dashboard = () => {
   const [hoveredIndex, setHoveredIndex] = useState(null);
@@ -9,13 +11,13 @@ const Dashboard = () => {
       id: 1,
       title: "Technology",
       description: "Bygg och programmera med Micro:bit och upplev den senaste teknologin inom AI och VR.",
-      image: "https://via.placeholder.com/150", // Replace with a real technology-related image URL
+      image: technologyImage
     },
     {
       id: 2,
       title: "Engineering",
       description: "Designa och bygg robotar med LEGO Spike och lär dig grunderna i mekanik och konstruktion.",
-      image: "https://via.placeholder.com/150", // Replace with a real engineering-related image URL
+      image: engineeringImage
     },
   ];
 
@@ -50,7 +52,10 @@ const Dashboard = () => {
             />
             <h3 style={styles.workshopTitle}>{workshop.title}</h3>
             <p style={styles.workshopDescription}>{workshop.description}</p>
-            <button style={styles.button}>Utforska mer</button>
+            {/* Show "BOKA" endast on hover */}
+            {hoveredIndex === index && (
+              <button style={styles.button}>Boka</button>
+            )}
           </div>
         ))}
       </div>
@@ -102,7 +107,7 @@ const Dashboard = () => {
 const styles = {
   container: {
     paddingTop: '80px', // Space for the Navbar height
-    background: 'linear-gradient(180deg, #7587C1 0%, #FFFFFF 100%)',
+    background: 'linear-gradient(180deg, #104470 0%, #FFFFFF 100%)',
     textAlign: 'center',
   },
   section: {
@@ -122,18 +127,18 @@ const styles = {
     margin: '0 auto',
   },
   workshopsContainer: {
-    display: 'flex',
-    justifyContent: 'center',
-    gap: '20px',
-    width: '100%',
-    maxWidth: '1200px',
-    padding: '0 20px',
-    marginBottom: '60px',
+      display: 'flex',
+      flexWrap: 'wrap',
+      justifyContent: 'center',
+      alignItems: 'center',
+      minHeight: '100vh',
+      gap: '20px', // Mellanrum mellan workshops
+      padding: '20px', // Padding runt innehållet
   },
   workshopBox: {
     width: '250px',
     height: '450px',
-    background: '#FFF9F9',
+    background: '#A4D5FD',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
