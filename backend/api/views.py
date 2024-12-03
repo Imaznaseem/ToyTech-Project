@@ -45,6 +45,15 @@ class WorkshopList(generics.ListAPIView):
     queryset = Workshop.objects.all()
     serializer_class = WorkshopSerializer
 
+class WorkshopWithDatesList(generics.ListAPIView):
+    queryset = Workshop.objects.filter(booking_dates__isnull=False).distinct()
+    serializer_class = WorkshopSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Workshop.objects.filter(booking_dates__isnull=False).distinct()
+
+
 class UserStatusView(APIView):
     permission_classes = [IsAuthenticated]
 

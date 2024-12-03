@@ -6,7 +6,7 @@ from .models import WorkshopBooking, Workshop, BookingDate
 class BookingDateSerializer(serializers.ModelSerializer):
     class Meta:
         model = BookingDate
-        fields = '__all__'  # This includes all fields in the BookingDate model
+        fields = ['date', 'available_slots', 'location']
         
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
@@ -26,9 +26,11 @@ class UserSerializer(serializers.ModelSerializer):
         return user
 
 class WorkshopSerializer(serializers.ModelSerializer):
+    booking_dates = BookingDateSerializer(many=True, read_only=True)
+
     class Meta:
         model = Workshop
-        fields = ['id', 'title', 'description', 'location', 'available_slots', 'date', 'time']
+        fields = ['id', 'title', 'description', 'location', 'available_slots', 'date', 'time', 'booking_dates']
 
 class WorkshopBookingSerializer(serializers.ModelSerializer):
     workshop = WorkshopSerializer(read_only=True)

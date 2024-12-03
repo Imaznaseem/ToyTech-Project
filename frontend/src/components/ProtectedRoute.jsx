@@ -1,47 +1,42 @@
 import { Navigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { jwtDecode } from "jwt-decode";
 import api from "../api";
 import { REFRESH_TOKEN, ACCESS_TOKEN } from "../constants";
-import Cookies from "js-cookie";  // Prefer cookies for secure token storage
+import { useState, useEffect } from "react";
+
 
 function ProtectedRoute({ children }) {
     const [isAuthorized, setIsAuthorized] = useState(null);
 
     useEffect(() => {
-        auth().catch(() => handleUnauthorized());
-    }, []);
-
-    const handleUnauthorized = () => {
-        Cookies.remove(ACCESS_TOKEN);
-        Cookies.remove(REFRESH_TOKEN);
-        setIsAuthorized(false);
-    };
+        auth().catch(() => setIsAuthorized(false))
+    }, [])
 
     const refreshToken = async () => {
-        const refreshToken = Cookies.get(REFRESH_TOKEN);
+        const refreshToken = localStorage.getItem(REFRESH_TOKEN);
         try {
             const res = await api.post("/api/token/refresh/", {
                 refresh: refreshToken,
             });
             if (res.status === 200) {
-                Cookies.set(ACCESS_TOKEN, res.data.access, { secure: true, sameSite: 'Strict' });
-                setIsAuthorized(true);
+                localStorage.setItem(ACCESS_TOKEN, res.data.access)
+                setIsAuthorized(true)
             } else {
-                handleUnauthorized();
+                setIsAuthorized(false)
             }
         } catch (error) {
-            console.error("Failed to refresh token:", error);
-            handleUnauthorized();
+            console.log(error);
+            setIsAuthorized(false);
         }
     };
 
     const auth = async () => {
-        const token = Cookies.get(ACCESS_TOKEN);
+        const token = localStorage.getItem(ACCESS_TOKEN);
         if (!token) {
             setIsAuthorized(false);
             return;
         }
-        const decoded = JSON.parse(atob(token.split('.')[1])); // Decode payload safely
+        const decoded = jwtDecode(token);
         const tokenExpiration = decoded.exp;
         const now = Date.now() / 1000;
 
