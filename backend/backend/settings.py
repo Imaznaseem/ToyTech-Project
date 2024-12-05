@@ -24,11 +24,22 @@ REST_FRAMEWORK = {
     ],
 }
 
+# Sessionsinställningar
+SESSION_COOKIE_HTTPONLY = True  # Gör cookies otillgängliga för JavaScript
+SESSION_COOKIE_SECURE = True  # Kräver HTTPS (använd endast om du kör i en säker miljö)
+CSRF_COOKIE_HTTPONLY = True  # Gör CSRF-cookies otillgängliga för JavaScript
+CSRF_COOKIE_SECURE = True  # Kräver HTTPS
+
 # JWT inställningar för token-livslängd
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
-    'BLACKLIST_AFTER_ROTATION': True,
+    "BLACKLIST_AFTER_ROTATION": True,
+    "AUTH_COOKIE": "access_token",  # Namn på cookien
+    "AUTH_COOKIE_SECURE": True,  # Kräver HTTPS
+    "AUTH_COOKIE_HTTPONLY": True,  # Gör cookien HttpOnly
+    "AUTH_COOKIE_PATH": "/",  # Tillgänglig för hela webbplatsen
+    "AUTH_COOKIE_SAMESITE": "Lax",  # Förhindrar cross-site requests
 }
 
 # Application definition

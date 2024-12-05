@@ -1,5 +1,13 @@
 # views/__init__.py
 
-from .employees_views import RegisterEmployeeView
+from .admin_views import (
+    RegisterAdminView,
+    UpdateAdminView,
+    DeleteAdminView,
+    AdminDashboardView,
+    AdminLoginView,
+    AdminLogoutView,
+    AdminProfileView,
+)
 from .booking_views import WorkshopBookingListView
 from .workshop_views import WorkshopListView

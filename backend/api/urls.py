@@ -1,13 +1,13 @@
 # api/urls.py
 from django.urls import path
-from api.views.employees_views import (
-    RegisterEmployeeView,
-    UpdateEmployeeView,
-    DeleteEmployeeView,
-    EmployeeDashboardView,
-    EmployeeLoginView,
-    EmployeeLogoutView,
-    EmployeeProfileView,
+from .views.admin_views import (
+    RegisterAdminView,
+    UpdateAdminView,
+    DeleteAdminView,
+    AdminDashboardView,
+    AdminLoginView,
+    AdminLogoutView,
+    AdminProfileView,
 )
 from api.views.workshop_views import (
     WorkshopListView, 
@@ -29,11 +29,11 @@ urlpatterns = [
     path("workshops/create/", WorkshopCreateView.as_view(), name="workshop-create"),
     path("workshops/<int:pk>/", WorkshopDetailView.as_view(), name="workshop-detail"),
     
-    path("employee/register/", RegisterEmployeeView.as_view(), name="employee-register"),
-    path("employee/update/", UpdateEmployeeView.as_view(), name="employee-update"),
-    path("employee/delete/", DeleteEmployeeView.as_view(), name="employee-delete"),
-    path("employee/dashboard/", EmployeeDashboardView.as_view(), name="employee-dashboard"),
-    path("employee/login/", EmployeeLoginView.as_view(), name="employee-login"),
-    path("employee/logout/", EmployeeLogoutView.as_view(), name="employee-logout"),
-    path("employee/profile/", EmployeeProfileView.as_view(), name="employee-profile"),
+    path("admin/register/", RegisterAdminView.as_view(), name="admin-register"),
+    path("admin/update/", UpdateAdminView.as_view(), name="admin-update"),
+    path("admin/delete/", DeleteAdminView.as_view(), name="admin-delete"),
+    path("admin/dashboard/", AdminDashboardView.as_view(), name="admin-dashboard"),
+    path("admin/login/", AdminLoginView.as_view(), name="admin-login"),
+    path("admin/logout/", AdminLogoutView.as_view(), name="admin-logout"),
+    path("admin/profile/", AdminProfileView.as_view(), name="admin-profile"),
 ]
