@@ -1,43 +1,37 @@
-import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { ChakraProvider } from '@chakra-ui/react';
-import Login from './components/Login';
-import Register from './components/Register';
-import Dashboard from './pages/Dashboard';
+import React, { useState } from "react";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { ChakraProvider } from "@chakra-ui/react";
+import Login from "./components/Login";
+import Dashboard from "./pages/Dashboard";
+import AdminPage from "./pages/AdminPage";
+import ProtectedRoute from "./components/ProtectedRoutes";
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  const handleLoginSuccess = () => {
-    setIsAuthenticated(true); // Uppdatera tillståndet till inloggad
-  };
 
   return (
     <ChakraProvider>
       <Router>
-        <div>
-          <Routes>
-            {/* Omdirigera startsidan direkt till dashboard */}
-            <Route
-              path="/"
-              element={<Navigate to="/dashboard" replace />}
-            />
-            <Route
-              path="/register"
-              element={<Register onRegisterSuccess={() => console.log("Registrering lyckades!")} />}
-            />
-            <Route
-              path="/login"
-              element={
-                isAuthenticated ? <Navigate to="/dashboard" replace /> : <Login onLoginSuccess={handleLoginSuccess} />
-              }
-            />
-            <Route
-              path="/dashboard"
-              element={<Dashboard isAuthenticated={isAuthenticated} />}
-            />
-          </Routes>
-        </div>
+        <Routes>
+          {/* Startsidan visar dashboard, tillgänglig för alla */}
+          <Route path="/dashboard" element={<Dashboard />} />
+
+          {/* Admin-login, tillgänglig för alla */}
+          <Route
+            path="/admin/login"
+            element={<Login />}
+          />
+
+          {/* Skyddad admin-dashboard */}
+          <Route
+            path="/admin/dashboard"
+            element={
+              <ProtectedRoute>
+                <AdminPage />
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
       </Router>
     </ChakraProvider>
   );

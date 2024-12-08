@@ -7,7 +7,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from ..serializers import UserSerializer
-from rest_framework_simplejwt.tokens import RefreshToken
+
 
 User = get_user_model()
 
@@ -89,57 +89,70 @@ class AdminDashboardView(APIView):
     """
     View for admin dashboard, only accessible to authenticated admins.
     """
-    permission_classes = [IsAuthenticated]
 
     def get(self, request):
+        # Debug-utskrifter
+        print(f"Session Key: {request.session.session_key}")
+        print(f"Cookies: {request.COOKIES}")
+        print(f"X-CSRFToken header: {request.headers.get('X-CSRFToken')}")
+        print(f"Authenticated user: {request.user}")
+        print(f"Is authenticated: {request.user.is_authenticated}")
+        print(f"Is staff: {request.user.is_staff}")
+        print(f"Is superuser: {request.user.is_superuser}")
+
+        # Check if the user is authenticated
+        if not request.user.is_authenticated:
+            return Response(
+                {"detail": "Du måste vara inloggad för att få tillgång till denna vy."},
+                status=status.HTTP_401_UNAUTHORIZED,
+            )
+
+        # Check if the user is staff
         if not request.user.is_staff:
             return Response(
-                {"detail": "Endast admins har tillgång till denna vy."},
+                {
+                    "detail": "Endast admins har tillgång till denna vy.",
+                    "username": request.user.username,
+                    "is_staff": request.user.is_staff,
+                    "is_superuser": request.user.is_superuser,
+                },
                 status=status.HTTP_403_FORBIDDEN,
             )
-        return Response({"detail": f"Välkommen till admin-dashboard, {request.user.username}!"}, status=status.HTTP_200_OK)
+
+        # Respond with success if all checks pass
+        return Response(
+            {
+                "detail": f"Välkommen till admin-dashboard, {request.user.username}!",
+                "username": request.user.username,
+                "is_staff": request.user.is_staff,
+                "is_superuser": request.user.is_superuser,
+            },
+            status=status.HTTP_200_OK,
+        )
+
 
 class AdminLoginView(APIView):
-    """
-    View to handle admin login and create a session.
-    """
-    permission_classes = [AllowAny]  # Allow anyone to access the login
+    permission_classes = [AllowAny]
 
     def post(self, request):
+        print(f"Request data: {request.data}")
         username = request.data.get("username")
         password = request.data.get("password")
+        print(f"Username: {username}, Password: {password}")
 
         if not username or not password:
-            return Response(
-                {"detail": "Användarnamn och lösenord krävs."},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+            return Response({"detail": "Användarnamn och lösenord krävs."}, status=400)
 
         user = authenticate(request, username=username, password=password)
 
         if user is not None and user.is_staff:
-            # Generera JWT-token
-            refresh = RefreshToken.for_user(user)
+            # Logga in användaren och skapa session
+            login(request, user)
+            print(f"Session key efter inloggning: {request.session.session_key}")
 
-            # Skicka tillbaka cookien som HttpOnly
-            response = Response(
-                {"detail": "Inloggning lyckades", "username": user.username},
-                status=status.HTTP_200_OK,
-            )
-            response.set_cookie(
-                key="access_token",
-                value=str(refresh.access_token),
-                httponly=True,  # Gör cookien otillgänglig för JavaScript
-                secure=True,  # Kräver HTTPS
-                samesite="Lax",
-            )
-            return response
+            return Response({"detail": "Inloggning lyckades", "username": user.username}, status=200)
 
-        return Response(
-            {"detail": "Ogiltigt användarnamn eller lösenord."},
-            status=status.HTTP_401_UNAUTHORIZED,
-        )
-
+        return Response({"detail": "Ogiltigt användarnamn eller lösenord."}, status=401)
 class AdminLogoutView(APIView):
     """
     View to handle admin logout and end the session.
@@ -156,7 +169,7 @@ class AdminProfileView(APIView):
     """
     View to display admin profile information. Only accessible to authenticated admins.
     """
-    permission_classes = [IsAuthenticated]
+    #permission_classes = [IsAuthenticated]
 
     def get(self, request):
         if not request.user.is_staff:
@@ -169,3 +182,17 @@ class AdminProfileView(APIView):
             "email": request.user.email,
         }
         return Response(admin_data, status=status.HTTP_200_OK)
+    
+class CheckLoginView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        # Kontrollera om användaren är autentiserad
+        if not request.user.is_authenticated:
+            return Response({"detail": "Inte inloggad."}, status=401)
+
+        # Kontrollera om användaren är admin
+        if not request.user.is_staff:
+            return Response({"detail": "Du har inte behörighet att se denna sida."}, status=403)
+
+        return Response({"detail": "Validering lyckades.", "username": request.user.username}, status=200)

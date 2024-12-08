@@ -17,7 +17,8 @@ ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '*').split(',')  # Tillåt flera host
 # Django Rest Framework inställningar
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
-        "rest_framework_simplejwt.authentication.JWTAuthentication",
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
     ),
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticated",
@@ -25,21 +26,22 @@ REST_FRAMEWORK = {
 }
 
 # Sessionsinställningar
-SESSION_COOKIE_HTTPONLY = True  # Gör cookies otillgängliga för JavaScript
-SESSION_COOKIE_SECURE = True  # Kräver HTTPS (använd endast om du kör i en säker miljö)
-CSRF_COOKIE_HTTPONLY = True  # Gör CSRF-cookies otillgängliga för JavaScript
-CSRF_COOKIE_SECURE = True  # Kräver HTTPS
+SESSION_COOKIE_HTTPONLY = True  # Gör session-cookien endast tillgänglig för servern
+SESSION_COOKIE_SECURE = False  # Kräver HTTPS (använd endast om du kör i en säker miljö)
+CSRF_COOKIE_HTTPONLY = False  # Gör CSRF-cookies otillgängliga för JavaScript
+CSRF_COOKIE_SECURE = False  # Kräver HTTPS
+SESSION_COOKIE_SAMESITE = 'Lax'  # Lägg till här
+CSRF_COOKIE_SAMESITE = 'Lax'  # Lägg till här
+
+SESSION_ENGINE = "django.contrib.sessions.backends.db"  # Default session backend
+
+
 
 # JWT inställningar för token-livslängd
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
     "BLACKLIST_AFTER_ROTATION": True,
-    "AUTH_COOKIE": "access_token",  # Namn på cookien
-    "AUTH_COOKIE_SECURE": True,  # Kräver HTTPS
-    "AUTH_COOKIE_HTTPONLY": True,  # Gör cookien HttpOnly
-    "AUTH_COOKIE_PATH": "/",  # Tillgänglig för hela webbplatsen
-    "AUTH_COOKIE_SAMESITE": "Lax",  # Förhindrar cross-site requests
 }
 
 # Application definition
@@ -58,11 +60,11 @@ INSTALLED_APPS = [
 
 # Middleware
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',  # Placera corsheaders-middleware tidigt
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.security.SecurityMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -125,6 +127,9 @@ CORS_ALLOWED_ORIGINS = [
     'http://localhost:5173'
 ]
 CORS_ALLOW_CREDENTIALS = True
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:5173",
+]
 
 # E-postinställningar
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

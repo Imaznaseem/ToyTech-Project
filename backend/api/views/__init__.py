@@ -11,3 +11,4 @@ from .admin_views import (
 )
 from .booking_views import WorkshopBookingListView
 from .workshop_views import WorkshopListView
+from .csrf_views import csrf_token_view

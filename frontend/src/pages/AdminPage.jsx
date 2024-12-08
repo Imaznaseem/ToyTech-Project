@@ -1,20 +1,61 @@
-// components/AdminPage.jsx
-
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { LogoutButton } from "../components/Logout"; 
 
 const AdminPage = () => {
-  const styles = {
-    container: {
-      paddingTop: "80px",
-      background: "linear-gradient(180deg, #104470 0%, #FFFFFF 100%)",
-      textAlign: "center",
-    },
-  };
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [welcomeMessage, setWelcomeMessage] = useState("");
+  const Navigate = useNavigate();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+
+
+  useEffect(() => {
+    const validateUser = async () => {
+      try {
+        const response = await fetch("/api/admin/check/", {
+          method: "GET",
+          credentials: "include", // Skicka med sessionscookie
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          console.log("Användare validerad:", data);
+          setIsAuthenticated(true); // Användaren är autentiserad
+        } else {
+          console.error("Validering misslyckades:", response.status);
+          Navigate("/api/admin/login"); // Om valideringen misslyckas
+        }
+      } catch (error) {
+        console.error("Fel vid validering:", error);
+        Navigate("/api/admin/login"); // Vid fel
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    validateUser();
+  }, [Navigate]);
+
+  if (loading) {
+    return <div>Kontrollerar behörighet...</div>;
+  }
+
+  if (!isAuthenticated) {
+    return null; // Blockera rendering om inte autentiserad
+  }
+
 
   return (
-    <div style={styles.container}>
-      <h1>Admin Dashboard</h1>
-      <p>Välkommen till adminpanelen!</p>
+    <div>
+      <h1>Admin Page</h1>
+      {/* Lägg till admin-funktioner här */}
+      <LogoutButton />
+
     </div>
   );
 };

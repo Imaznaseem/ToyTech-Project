@@ -1,5 +1,8 @@
 # api/urls.py
 from django.urls import path
+
+from .views.csrf_views import csrf_token_view
+
 from .views.admin_views import (
     RegisterAdminView,
     UpdateAdminView,
@@ -8,6 +11,7 @@ from .views.admin_views import (
     AdminLoginView,
     AdminLogoutView,
     AdminProfileView,
+    CheckLoginView,
 )
 from api.views.workshop_views import (
     WorkshopListView, 
@@ -21,6 +25,9 @@ from .views.booking_views import (
 )
 
 urlpatterns = [
+
+    path("csrf/", csrf_token_view, name="csrf-token"),
+
     path("bookings/create/", WorkshopBookingCreateView.as_view(), name="booking-create"),
     path("bookings/", WorkshopBookingListView.as_view(), name="booking-list"),
     path("bookings/<int:pk>/", WorkshopBookingRetrieveUpdateDeleteView.as_view(), name="booking-detail"),
@@ -36,4 +43,5 @@ urlpatterns = [
     path("admin/login/", AdminLoginView.as_view(), name="admin-login"),
     path("admin/logout/", AdminLogoutView.as_view(), name="admin-logout"),
     path("admin/profile/", AdminProfileView.as_view(), name="admin-profile"),
+    path("admin/check/", CheckLoginView.as_view(), name="admin-check"),
 ]

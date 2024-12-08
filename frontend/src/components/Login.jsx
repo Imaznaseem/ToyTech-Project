@@ -1,63 +1,81 @@
-// components/Login.jsx
-
 import React, { useState } from "react";
-import axios from "axios";
-import { Box, Button, FormControl, FormLabel, Input, Text, Heading } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
+import { Box, Input, Button, Text, FormControl, FormLabel } from "@chakra-ui/react";
+import { getCsrfToken} from "../api"; // Anpassa om sökvägen är annorlunda 
+import { updateCsrfToken } from "../utils"; // Anpassa om sökvägen är annorlunda
 
-const Login = ({ onLoginSuccess }) => {
+const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [errorMessage, setErrorMessage] = useState(null);
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
+
     try {
-      const response = await axios.post(
-        "http://127.0.0.1:8000/user/login/",
-        { username, password },
-        { withCredentials: true }
-      );
-      const { role } = response.data; // Kontrollera rollen från svaret
-      if (role === "admin") {
-        navigate("/admin");
+      // Hämta CSRF-token innan inloggning
+      await getCsrfToken();
+
+      // Skicka inloggningsbegäran
+      const response = await fetch("/api/admin/login/", {
+        method: "POST",
+        credentials: "include", // Skicka och ta emot cookies
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": updateCsrfToken(), // Hämta uppdaterad CSRF-token
+        },
+        body: JSON.stringify({ username, password }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Inloggning lyckades:", data);
+
+        // Uppdatera autentiseringsstatus och navigera
+        updateCsrfToken(); // Uppdatera CSRF-token efter inloggning
+        console.log("navigerar till /admin/dashboard");
+        navigate("/admin/dashboard");
       } else {
-        onLoginSuccess();
+        const errorData = await response.json();
+        setErrorMessage(errorData.detail || "Inloggningen misslyckades.");
+        console.error("Fel vid inloggning:", errorData);
       }
     } catch (error) {
-      setError("Fel användarnamn eller lösenord");
+      console.error("Ett fel inträffade:", error);
+      setErrorMessage("Ett tekniskt fel inträffade. Försök igen senare.");
     }
   };
+  
 
   return (
-    <Box maxWidth="400px" mx="auto" mt="50px" p="20px" borderRadius="8px" boxShadow="md" bg="white">
-      <Heading as="h2" size="lg" mb="4" textAlign="center">
-        Logga in
-      </Heading>
-      <form onSubmit={handleSubmit}>
-        <FormControl mb="4">
-          <FormLabel>Användarnamn:</FormLabel>
+    <Box p={6} maxW="400px" mx="auto" mt={10} boxShadow="lg" borderRadius="md" bg="gray.50">
+      <Text fontSize="2xl" fontWeight="bold" mb={4}>
+        Admin Login
+      </Text>
+      {errorMessage && <Text color="red.500" mb={4}>{errorMessage}</Text>}
+      <form onSubmit={handleLogin}>
+        <FormControl id="username" mb={4} isRequired>
+          <FormLabel>Användarnamn</FormLabel>
           <Input
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            required
+            placeholder="Ange användarnamn"
           />
         </FormControl>
-        <FormControl mb="4">
-          <FormLabel>Lösenord:</FormLabel>
+        <FormControl id="password" mb={4} isRequired>
+          <FormLabel>Lösenord</FormLabel>
           <Input
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            required
+            placeholder="Ange lösenord"
           />
         </FormControl>
-        <Button type="submit" colorScheme="blue" width="full">
+        <Button type="submit" colorScheme="blue" width="full" mt={4}>
           Logga in
         </Button>
-        {error && <Text color="red.500" mt="2">{error}</Text>}
       </form>
     </Box>
   );
