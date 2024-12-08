@@ -26,6 +26,8 @@ class CreateUserView(generics.CreateAPIView):
     serializer_class = UserSerializer
     permission_classes = [AllowAny]
 
+# views.py
+
 class WorkshopBookingListCreate(generics.ListCreateAPIView):
     serializer_class = WorkshopBookingSerializer
     permission_classes = [IsAuthenticated]
@@ -36,10 +38,8 @@ class WorkshopBookingListCreate(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         # Associate the booking with the current user
-        booking = serializer.save(user=self.request.user)
-        # Send email after the booking is saved
-        booking.send_verification_email()
-        booking.send_notification_to_admin()
+        serializer.save(user=self.request.user)
+
 
 class WorkshopList(generics.ListAPIView):
     queryset = Workshop.objects.all()

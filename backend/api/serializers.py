@@ -32,15 +32,19 @@ class WorkshopSerializer(serializers.ModelSerializer):
         model = Workshop
         fields = ['id', 'title', 'description', 'location', 'available_slots', 'date', 'time', 'booking_dates']
 
+# serializers.py
+
 class WorkshopBookingSerializer(serializers.ModelSerializer):
-    workshop = WorkshopSerializer(read_only=True)
+    workshop = serializers.PrimaryKeyRelatedField(queryset=Workshop.objects.all())
 
     class Meta:
         model = WorkshopBooking
         fields = [
-            'id', 'workshop', 'user', 'organization_name', 'organization_type',
-            'email', 'phone_number', 'number_of_attendees', 'additional_message', 'created_at', 'is_confirmed'
+            'id', 'workshop', 'user', 'title', 'first_name', 'last_name', 'email',
+            'phone_number', 'organization_type', 'organization_name', 'postcode',
+            'hear_about_us', 'message', 'created_at', 'is_confirmed'
         ]
         read_only_fields = ['user', 'is_confirmed', 'created_at']
+
 
 

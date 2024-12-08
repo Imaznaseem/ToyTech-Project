@@ -33,26 +33,38 @@ class Workshop(models.Model):
         return f"{self.title} on {self.date} at {self.time}"
 
 
+# models.py
+
 class WorkshopBooking(models.Model):
     ORGANIZATION_TYPES = [
         ('school', 'School'),
         ('company', 'Company'),
         ('private', 'Private Individual'),
     ]
+    HEAR_ABOUT_US_CHOICES = [
+        ('website', 'Website'),
+        ('social_media', 'Social Media'),
+        ('word_of_mouth', 'Word of Mouth'),
+        ('advertisement', 'Advertisement'),
+    ]
 
     workshop = models.ForeignKey(Workshop, on_delete=models.CASCADE, related_name="bookings")
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="bookings")
-    organization_name = models.CharField(max_length=200, blank=True, null=True)
-    organization_type = models.CharField(max_length=20, choices=ORGANIZATION_TYPES)
-    email = models.EmailField()
-    phone_number = models.CharField(max_length=15)
-    number_of_attendees = models.PositiveIntegerField()
-    additional_message = models.TextField(blank=True, null=True)
+    title = models.CharField(max_length=50, blank=True, null=True)
+    first_name = models.CharField(max_length=255, default="Anonymous")
+    last_name = models.CharField(max_length=100, blank=True, null=True, default="Anonymous")
+    email = models.EmailField(blank=True, null=True)  # If email is required, add `default="user@example.com"`
+    phone_number = models.CharField(max_length=15, blank=True, null=True, default="0000000000")
+    organization_type = models.CharField(max_length=20, choices=ORGANIZATION_TYPES, default="private")
+    organization_name = models.CharField(max_length=200, blank=True, null=True, default="Not Provided")
+    postcode = models.CharField(max_length=20, blank=True, null=True, default="00000")
+    hear_about_us = models.CharField(max_length=20, choices=HEAR_ABOUT_US_CHOICES, blank=True, null=True, default="other")
+    message = models.TextField(default="No message provided")
     created_at = models.DateTimeField(auto_now_add=True)
     is_confirmed = models.BooleanField(default=False)  # Whether the booking has been confirmed
 
     def __str__(self):
-        return f"Booking for {self.workshop.title} by {self.user.username}"
+        return f"Booking for {self.workshop.title} by {self.first_name} {self.last_name}"
 
     def save(self, *args, **kwargs):
         is_new = self.pk is None  # Check if this is a new booking
@@ -64,6 +76,7 @@ class WorkshopBooking(models.Model):
 
             # Send notification email to the admin or workshop owner
             self.send_notification_to_admin()
+
 
     def send_verification_email(self):
         subject = "Workshop Booking Confirmation"

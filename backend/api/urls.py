@@ -10,8 +10,8 @@ urlpatterns = [
     path('workshops/', WorkshopList.as_view(), name='workshop-list'),
     path('bookings/', WorkshopBookingListCreate.as_view(), name='workshop-booking'),
     path('workshops/with-dates/', WorkshopWithDatesList.as_view(), name='workshops-with-dates'),
-
     path("user/status/", UserStatusView.as_view(), name="user-status"),
+    path('bookings/', WorkshopBookingListCreate.as_view(), name='workshop-booking'),
     
 ]
 
