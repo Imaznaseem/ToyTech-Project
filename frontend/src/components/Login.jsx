@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Input, Button, Text, FormControl, FormLabel } from "@chakra-ui/react";
-import { getCsrfToken} from "../api"; // Anpassa om sökvägen är annorlunda 
+import { getCsrfToken} from "../apiUtils"; // Anpassa om sökvägen är annorlunda 
 import { updateCsrfToken } from "../utils"; // Anpassa om sökvägen är annorlunda
 
 const Login = () => {

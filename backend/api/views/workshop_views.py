@@ -1,4 +1,5 @@
 from rest_framework import generics
+from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from ..serializers import WorkshopSerializer
@@ -37,6 +38,7 @@ class WorkshopCreateView(generics.CreateAPIView):
     queryset = Workshop.objects.all()
     serializer_class = WorkshopSerializer
     permission_classes = [IsAuthenticated]  # Endast autentiserade användare
+    parser_classes = [MultiPartParser, FormParser]  # Support for multipart form data
 
     def perform_create(self, serializer):
         if not self.request.user.is_staff:

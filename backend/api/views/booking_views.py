@@ -1,5 +1,6 @@
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
+from rest_framework.parsers import JSONParser
 from ..serializers import WorkshopBookingSerializer
 from ..models import WorkshopBooking
 
@@ -8,15 +9,21 @@ class WorkshopBookingCreateView(generics.CreateAPIView):
     """
     View to allow anyone to create a booking.
     """
+    queryset = WorkshopBooking.objects.all()
+    parser_classes = [JSONParser]  # Ensure JSON is supported
     serializer_class = WorkshopBookingSerializer
     permission_classes = [permissions.AllowAny]  # Anyone can access this endpoint
 
-    def perform_create(self, serializer):
-        # Create the booking without associating it with an authenticated user
-        booking = serializer.save()
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         # Optionally send emails
-        booking.send_verification_email()
-        booking.send_notification_to_admin()
+        #booking.send_verification_email()
+        #booking.send_notification_to_admin()
 
 
 class WorkshopBookingListView(generics.ListAPIView):
