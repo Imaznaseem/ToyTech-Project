@@ -12,9 +12,9 @@ import {
   ListItem,
   Link,
 } from "@chakra-ui/react";
-import Navbar from "../components/Navbar"; // Import the Navbar component
-import { fetchWorkshops } from "../api/workshops"; 
-import BookingModal from "../components/BookingModal"; // Import BookingModal component
+import Navbar from "../components/Navbar";
+import { fetchWorkshops } from "../api/workshops";
+import BookingModal from "../components/BookingModal";
 
 const Dashboard = () => {
   const [hoveredIndex, setHoveredIndex] = useState(null);
@@ -27,7 +27,7 @@ const Dashboard = () => {
   useEffect(() => {
     const loadWorkshops = async () => {
       try {
-        const data = await fetchWorkshops(); // Replace with your actual API call
+        const data = await fetchWorkshops();
         setWorkshops(data);
       } catch (error) {
         console.error("Failed to fetch workshops:", error);
@@ -39,26 +39,32 @@ const Dashboard = () => {
     loadWorkshops();
   }, []);
 
-    // Open Booking Modal
-    const handleBook = (workshop) => {
-      setSelectedWorkshop(workshop);
-      setIsModalOpen(true);
-    };
+  // Open Booking Modal
+  const handleBook = (workshop) => {
+    setSelectedWorkshop(workshop);
+    setIsModalOpen(true);
+  };
 
   if (loading) {
     return (
-      <Flex justify="center" align="center" minH="100vh">
+      <Flex justify="center" align="center" minH="100vh" bg="gray.100">
         <Spinner size="xl" />
       </Flex>
     );
   }
 
   return (
-    <Box bg="linear-gradient(180deg, #104470 0%, #FFFFFF 100%)" minH="150vh" minW="200vh" pt="100px">
+    <Box
+      bg="linear-gradient(180deg, #104470 0%, #D3D3D3 100%)"
+      minH="100vh"
+      w="100vw"
+      overflowX="hidden"
+      pt="64px" // Ensure content starts below the navbar
+    >
       <Navbar />
 
       {/* Home Section */}
-      <Flex direction="column" align="center" py="8">
+      <Flex direction="column" align="center" py="8" px="4">
         <Text
           fontSize="xl"
           textAlign="center"
@@ -75,8 +81,8 @@ const Dashboard = () => {
         wrap="wrap"
         justify="center"
         align="center"
-        gap="10"
-        px="6"
+        gap="6"
+        px="4"
         py="8"
         w="100%"
       >
@@ -86,7 +92,7 @@ const Dashboard = () => {
             w="260px"
             h="450px"
             bg="blue.200"
-            p="10"
+            p="6"
             borderRadius="md"
             shadow="md"
             position="relative"
@@ -132,8 +138,8 @@ const Dashboard = () => {
         ))}
       </Flex>
 
-            {/* Booking Modal */}
-            {selectedWorkshop && (
+      {/* Booking Modal */}
+      {selectedWorkshop && (
         <BookingModal
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
@@ -142,7 +148,7 @@ const Dashboard = () => {
       )}
 
       {/* About Us Section */}
-      <Box id="about-us" py="8" px="6" textAlign="center">
+      <Box id="about-us" py="8" px="6" textAlign="center" bg="transparent">
         <Heading size="lg" mb="4" color="blue.700">
           Om oss
         </Heading>
@@ -151,39 +157,10 @@ const Dashboard = () => {
           utforska teknikens värld. Genom praktiska och engagerande aktiviteter väcker vi intresse för vetenskap, teknik,
           ingenjörskonst och matematik (STEM). Välkommen till ToyTech, där vi tillsammans formar en framtid av innovatörer!
         </Text>
-        <Heading size="md" mb="4" color="blue.700">
-          Varför välja oss
-        </Heading>
-        <List spacing="4" textAlign="left" maxW="800px" mx="auto" color="gray.700">
-          <ListItem>
-            <Text as="span" fontWeight="bold">
-              Inspirera Innovatörer:
-            </Text>{" "}
-            Våra workshops engagerar barn i STEM-ämnen genom praktiska och roliga aktiviteter.
-          </ListItem>
-          <ListItem>
-            <Text as="span" fontWeight="bold">
-              Senaste Tekniken:
-            </Text>{" "}
-            Vi använder den senaste teknologin inom AI och andra framväxande områden.
-          </ListItem>
-          <ListItem>
-            <Text as="span" fontWeight="bold">
-              Kreativt Lärande:
-            </Text>{" "}
-            Interaktivt och roligt lärande är vårt fokus.
-          </ListItem>
-          <ListItem>
-            <Text as="span" fontWeight="bold">
-              Förebilder:
-            </Text>{" "}
-            Våra ledare är studenter från prestigefyllda utbildningar som delar sina kunskaper och passioner med nästa generation.
-          </ListItem>
-        </List>
       </Box>
 
       {/* Contact Section */}
-      <Box id="contact" py="8" px="6" textAlign="center" bg="transparant">
+      <Box id="contact" py="8" px="6" textAlign="center" bg="transparent">
         <Heading size="lg" mb="4" color="blue.700">
           Kontakt
         </Heading>
@@ -210,3 +187,5 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+
+
