@@ -52,7 +52,7 @@ const AdminPage = () => {
     }
 
     return (
-      <Flex bg="gray.100" minH="100vh" w="100%" p={8} gap={6}>
+      <Flex bg="gray.100" minH="100vh" minW="200vh" p={8} gap={6}>
           {/* Left Section */}
           <Box flex="2" bg="white" p={6} shadow="md" borderRadius="md">
               <Heading size="md" mb={4} color="teal.600">
