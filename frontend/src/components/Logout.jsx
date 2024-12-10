@@ -1,4 +1,4 @@
-import { logout } from "../api";
+import { logout } from "../apiUtils";
 
 export const LogoutButton = () => {
     const handleLogout = async () => {

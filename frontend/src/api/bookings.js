@@ -18,16 +18,16 @@ export const fetchBookings = async () => {
 export const createBooking = async (data) => {
     const response = await fetch("/api/bookings/create/", {
         method: "POST",
-        credentials: "include",
         headers: {
             "Content-Type": "application/json",
-            "X-CSRFToken": updateCsrfToken(), // Add CSRF token here
         },
-        body: data,
+        body: JSON.stringify(data), // Ensure the body is stringified
     });
     if (!response.ok) {
-        throw new Error("Failed to create booking");
+        const errorData = await response.json().catch(() => ({})); // Capture any error details
+        throw new Error(errorData.detail || "Failed to create booking");
     }
+
     return response.json();
 };
 

@@ -13,6 +13,7 @@ import {
 import { fetchWorkshops } from "../api/workshops";
 import CreateWorkshopModal from "../components/CreateWorkshopModal";
 import EditWorkshopModal from "../components/EditWorkshopModal";
+import LogoutButton from '../components/Logout'; // Adjust the path if needed
 
 const AdminPage = () => {
   const [workshops, setWorkshops] = useState([]);
@@ -61,6 +62,7 @@ const AdminPage = () => {
       w="100vw" // Ensure it spans the full viewport width
       overflow="hidden" // Prevent horizontal scrolling
     >
+
       {/* Left Section */}
       <Box
         flex="2"
@@ -71,6 +73,17 @@ const AdminPage = () => {
         boxSizing="border-box"
         maxW="100%" // Prevent content overflow
       >
+              {/* Header Section */}
+      <Flex
+        bg="white"
+        p={4}
+        shadow="md"
+        borderRadius="md"
+        align="center"
+      >
+        <LogoutButton />
+      </Flex>
+
         <Heading size="md" mb={4} color="teal.600">
           Booking Requests
         </Heading>

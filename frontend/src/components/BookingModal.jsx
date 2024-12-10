@@ -47,27 +47,14 @@ const BookingModal = ({ isOpen, onClose, workshopId }) => {
     };
 
     try {
-      await createBooking(JSON.stringify(data));
-      toast({
-        title: "Booking created!",
-        description: "Your booking request has been submitted successfully.",
-        status: "success",
-        duration: 5000,
-        isClosable: true,
-      });
-      onClose(); // Close modal
+        await createBooking(data);
+        alert("Booking created successfully!");
+        onClose(); // Close the modal if applicable
     } catch (error) {
-      toast({
-        title: "Error",
-        description: "There was an error creating your booking.",
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-      });
-    } finally {
-      setLoading(false);
+        console.error("Error creating booking:", error.message);
+        alert(error.message);
     }
-  };
+};
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>

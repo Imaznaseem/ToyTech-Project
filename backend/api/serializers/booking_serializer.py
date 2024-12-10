@@ -2,14 +2,11 @@
 
 from rest_framework import serializers
 from ..models import WorkshopBooking
+from ..models import Workshop
 
 class WorkshopBookingSerializer(serializers.ModelSerializer):
+    workshop = serializers.PrimaryKeyRelatedField(queryset=Workshop.objects.all())
     class Meta:
         model = WorkshopBooking
-        fields = [
-            'id', 'workshop', 'contact_name', 'organization_name',
-            'organization_type', 'email', 'phone_number',
-            'number_of_attendees', 'additional_message',
-            'created_at', 'is_confirmed', 'workshop_date'
-        ]
+        fields = '__all__'
 

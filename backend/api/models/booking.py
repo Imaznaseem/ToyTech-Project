@@ -32,10 +32,11 @@ class WorkshopBooking(models.Model):
 
         if is_new:
             # Send verification email to the user
-            self.send_verification_email()
+          #  self.send_verification_email()
 
             # Send notification email to the admin or workshop owner
-            self.send_notification_to_admin()
+           # self.send_notification_to_admin()
+           pass
 
     def send_verification_email(self):
         subject = "Workshop Booking Confirmation"
