@@ -14,6 +14,7 @@ import { fetchWorkshops } from "../api/workshops";
 import CreateWorkshopModal from "../components/CreateWorkshopModal";
 import EditWorkshopModal from "../components/EditWorkshopModal";
 import LogoutButton from '../components/Logout'; // Adjust the path if needed
+import BookingList from "../components/BookingList";
 
 const AdminPage = () => {
   const [workshops, setWorkshops] = useState([]);
@@ -73,26 +74,24 @@ const AdminPage = () => {
         boxSizing="border-box"
         maxW="100%" // Prevent content overflow
       >
-              {/* Header Section */}
-      <Flex
-        bg="white"
-        p={4}
-        shadow="md"
-        borderRadius="md"
-        align="center"
-      >
-        <LogoutButton />
-      </Flex>
+        {/* Header Section */}
+        <Flex
+          bg="white"
+          p={4}
+          shadow="md"
+          borderRadius="md"
+          align="center"
+        >
+          <LogoutButton />
+        </Flex>
 
         <Heading size="md" mb={4} color="teal.600">
           Booking Requests
         </Heading>
         <VStack align="stretch" spacing={4} mb={8}>
-          <Box bg="gray.50" p={4} shadow="sm" borderRadius="md">
-            <Text>Request 1</Text>
-          </Box>
-          <Box bg="gray.50" p={4} shadow="sm" borderRadius="md">
-            <Text>Request 2</Text>
+          {/* Booking Requests */}
+          <Box bg="white" p={6} shadow="md" borderRadius="md">
+            <BookingList title="Booking Requests" isConfirmed={false} />
           </Box>
         </VStack>
 
@@ -102,11 +101,9 @@ const AdminPage = () => {
           Upcoming Workshops
         </Heading>
         <VStack align="stretch" spacing={4}>
-          <Box bg="gray.50" p={4} shadow="sm" borderRadius="md">
-            <Text>Workshop 1</Text>
-          </Box>
-          <Box bg="gray.50" p={4} shadow="sm" borderRadius="md">
-            <Text>Workshop 2</Text>
+          {/* Upcoming Workshops */}
+          <Box bg="white" p={6} shadow="md" borderRadius="md">
+            <BookingList title="Upcoming Workshops" isConfirmed={true} />
           </Box>
         </VStack>
       </Box>

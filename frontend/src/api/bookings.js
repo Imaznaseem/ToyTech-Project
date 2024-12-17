@@ -32,6 +32,7 @@ export const createBooking = async (data) => {
 };
 
 export const updateBooking = async (id, data) => {
+    console.log("Sending update for booking:", data); // Logga datan
     const response = await fetch(`/api/bookings/${id}/`, {
         method: "PUT",
         credentials: "include",
@@ -39,7 +40,7 @@ export const updateBooking = async (id, data) => {
             "Content-Type": "application/json",
             "X-CSRFToken": updateCsrfToken(), // Hämta uppdaterad CSRF-token
           },
-        body: data,
+        body: JSON.stringify(data),
     });
     if (!response.ok) {
         throw new Error("Failed to update booking");
