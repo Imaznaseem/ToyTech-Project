@@ -44,8 +44,11 @@ class WorkshopBookingListView(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]  # Only authenticated users
 
     def get_queryset(self):
+        user = self.request.user
+        if user.is_staff:  # Om användaren är admin
+            return WorkshopBooking.objects.all()
         # Return bookings for the authenticated user
-        return WorkshopBooking.objects.filter(email=self.request.user.email)
+        return WorkshopBooking.objects.filter(email=user.email)
 
 
 class WorkshopBookingRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
@@ -55,13 +58,12 @@ class WorkshopBookingRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIV
 
     def get_queryset(self):
         # Tillåt bara åtkomst till bokningar kopplade till användarens e-post
-        return WorkshopBooking.objects.filter(email=self.request.user.email)
+        return WorkshopBooking.objects.all()
 
     def perform_update(self, serializer):
         booking = serializer.save()
-        if 'is_confirmed' in serializer.validated_data and serializer.validated_data['is_confirmed']:
-            # Skicka notifiering när en bokning bekräftas
-            booking.send_notification_to_admin()
+        # Logg uppdateringen för felsökning
+        print(f"Booking {booking.id} updated: is_confirmed={booking.is_confirmed}")
 
 
     def perform_destroy(self, instance):
