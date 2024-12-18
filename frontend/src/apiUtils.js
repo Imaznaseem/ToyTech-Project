@@ -1,4 +1,5 @@
 import axios from "axios";
+import { updateCsrfToken } from "./utils"; // Anpassa om sökvägen är annorlunda
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL, // Din API-bas-URL
@@ -31,14 +32,19 @@ api.interceptors.request.use(
 );
 
 export const logout = async () => {
-    try {
-        const response = await api.post("/api/admin/logout/");
-        console.log("Utloggning lyckades:", response.data);
-        return response.data;
-    } catch (error) {
-        console.error("Ett fel uppstod vid utloggning:", error.response || error);
-        throw error;
-    }
+  try {
+      const response = await api.post("/api/admin/logout/", null, {
+          headers: {
+              "X-CSRFToken": updateCsrfToken(), // Hämta aktuell CSRF-token
+          },
+          withCredentials: true, // Se till att cookies skickas
+      });
+      console.log("Utloggning lyckades:", response.data);
+      return response.data;
+  } catch (error) {
+      console.error("Ett fel uppstod vid utloggning:", error.response || error);
+      throw error;
+  }
 };
 
 export default api;
