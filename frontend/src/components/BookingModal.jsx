@@ -47,14 +47,41 @@ const BookingModal = ({ isOpen, onClose, workshopId }) => {
     };
 
     try {
-        await createBooking(data);
-        alert("Booking created successfully!");
-        onClose(); // Close the modal if applicable
+      await createBooking(data);
+      toast({
+        title: "Booking Successful",
+        description: "Your workshop booking has been successfully created.",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
+      resetForm(); // Rensa formens state
+      onClose(); // Stäng modalen
     } catch (error) {
-        console.error("Error creating booking:", error.message);
-        alert(error.message);
+      console.error("Error creating booking:", error.message);
+      toast({
+        title: "Booking Failed",
+        description: error.message,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    } finally {
+      setLoading(false);
     }
-};
+  };
+  
+  // Funktion för att återställa formuläret
+  const resetForm = () => {
+    setContactName("");
+    setOrganizationName("");
+    setOrganizationType("");
+    setEmail("");
+    setPhoneNumber("");
+    setNumberOfAttendees("");
+    setWorkshopDate("");
+    setAdditionalMessage("");
+  };
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
