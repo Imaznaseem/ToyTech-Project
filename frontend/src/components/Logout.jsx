@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { logout } from "../apiUtils";
 
 export const LogoutButton = () => {
+    const navigate = useNavigate(); // Skapa navigate-instans
     const handleLogout = async () => {
         try {
             await logout();
