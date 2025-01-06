@@ -2,10 +2,10 @@ import React from "react";
 import {
   Box,
   Heading,
-  VStack,
   Flex,
   Button,
   Text,
+  Image,
 } from "@chakra-ui/react";
 import { useDisclosure } from "@chakra-ui/react";
 import EditWorkshopModal from "../components/EditWorkshopModal";
@@ -22,74 +22,117 @@ const ManageWorkshopsPage = ({ workshops, onRefresh }) => {
   };
 
   return (
-    <Flex
+    <Box
+      bg="#111839" // Gradient bakgrund
       minH="100vh"
-      justify="center"
-      align="center"
-      bg="gray.100"
-      p={6}
+      w="100vw"
+      overflowX="hidden"
+      py={10}
+      px={6}
+      color="white"
     >
-      <Box
-        bg="white"
-        p={8}
-        shadow="lg"
-        borderRadius="md"
-        maxW="600px"
-        w="100%"
-        textAlign="center"
+      <Flex
+        maxW="1240px"
+        mx="auto"
+        direction="column"
+        align="center"
+        gap={6}
       >
-        {/* Centrera rubriken */}
-        <Heading size="lg" mb={6} color="teal.600">
+        {/* Rubrik */}
+        <Heading
+          as="h2"
+          size="xl"
+          fontWeight="bold"
+          mb={8}
+          textAlign="center"
+          fontSize={["2xl", "3xl", "4xl"]}
+        >
           Hantera Workshops
         </Heading>
 
-        {/* Centrera listan av workshops */}
-        <VStack align="stretch" spacing={4} mb={8}>
-          {workshops.map((workshop) => (
+        {/* Workshops Grid */}
+        <Flex
+          gap={8}
+          wrap="wrap"
+          justify="center"
+          maxW="1240px"
+        >
+          {workshops.map((workshop, index) => (
             <Box
-              key={workshop.id}
-              bg="gray.50"
-              p={4}
-              shadow="sm"
-              borderRadius="md"
-              _hover={{ bg: "gray.100" }}
+              key={index}
+              bg="white"
+              color="black"
+              w={["100%", "300px"]}
+              shadow="xl"
+              rounded="lg"
+              p={6}
+              transition="transform 0.3s ease-in-out"
+              _hover={{ transform: "scale(1.05)" }}
             >
-              <Flex justify="space-between" align="center">
-                <Box textAlign="left">
-                  <Heading size="sm">{workshop.title}</Heading>
-                  <Text>{workshop.description}</Text>
-                </Box>
-                <Button
-                  size="sm"
-                  colorScheme="blue"
-                  onClick={() => handleEdit(workshop)}
-                >
-                  Edit
-                </Button>
-              </Flex>
+              {/* Workshop Main Image */}
+              <Image
+                src={workshop.mainImage || "/placeholder.png"} // Fallback bild
+                alt={workshop.title}
+                w="80px"
+                h="80px"
+                mx="auto"
+                mt={-12}
+                bg="white"
+                borderRadius="full"
+              />
+
+              {/* Workshop Title */}
+              <Heading as="h3" size="md" textAlign="center" py={4}>
+                {workshop.title}
+              </Heading>
+
+              {/* Workshop Description */}
+              <Text textAlign="center" fontSize="sm" fontWeight="medium" mb={6}>
+                {workshop.description}
+              </Text>
+
+              {/* Edit Button */}
+              <Button
+                bg="blue.500"
+                color="white"
+                _hover={{ bg: "blue.600" }}
+                w="100%"
+                rounded="md"
+                fontWeight="medium"
+                onClick={() => handleEdit(workshop)}
+              >
+                Edit
+              </Button>
             </Box>
           ))}
-        </VStack>
+        </Flex>
 
-        {/* Centrera knappen */}
-        <Button colorScheme="green" onClick={onCreateOpen}>
+        {/* Skapa Ny Workshop */}
+        <Button
+          bg="green.500"
+          color="white"
+          _hover={{ bg: "green.600" }}
+          size="lg"
+          mt={8}
+          onClick={onCreateOpen}
+        >
           Skapa Ny Workshop
         </Button>
+      </Flex>
 
-        {/* Modaler */}
-        <CreateWorkshopModal
-          isOpen={isCreateOpen}
-          onClose={onCreateClose}
-          onRefresh={onRefresh}
-        />
-        <EditWorkshopModal
-          isOpen={isEditOpen}
-          onClose={onEditClose}
-          workshop={selectedWorkshop}
-          onRefresh={onRefresh}
-        />
-      </Box>
-    </Flex>
+      {/* Modaler */}
+      <CreateWorkshopModal
+        isOpen={isCreateOpen}
+        onClose={onCreateClose}
+        onRefresh={onRefresh}
+      />
+      <EditWorkshopModal
+        isOpen={isEditOpen}
+        onClose={onEditClose}
+        workshop={selectedWorkshop}
+        onRefresh={onRefresh}
+      />
+    </Box>
   );
 };
 
