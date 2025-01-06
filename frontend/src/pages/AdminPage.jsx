@@ -85,6 +85,9 @@ const AdminPage = () => {
           <LogoutButton />
         </Flex>
 
+        <Divider mt={12} />
+
+
         <Heading size="md" mb={4} color="teal.600">
           Booking Requests
         </Heading>
