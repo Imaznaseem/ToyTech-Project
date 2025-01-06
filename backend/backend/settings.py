@@ -121,10 +121,9 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # Standardvärde för primär nyckelfält
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-<<<<<<< HEAD
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOWS_CREDENTIALS = True
-=======
+
 # CORS-inställningar
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
@@ -135,7 +134,6 @@ CSRF_TRUSTED_ORIGINS = [
     "http://localhost:5173",
     'http://localhost:3000'
 ]
->>>>>>> testing_frontend
 
 # E-postinställningar
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

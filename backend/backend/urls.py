@@ -6,12 +6,7 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-<<<<<<< HEAD
-    path("api/", include("api.urls")),  
-    path("api-auth/", include("rest_framework.urls")), 
-=======
     path('api/', include('api.urls')),  # Inkludera alla rutter från api/urls.py
->>>>>>> testing_frontend
 ]
 
 # Lägg till stöd för mediafiler

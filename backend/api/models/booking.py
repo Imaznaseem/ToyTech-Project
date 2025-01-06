@@ -1,39 +1,7 @@
 from django.db import models
 from django.core.mail import send_mail
 from django.conf import settings
-<<<<<<< HEAD:backend/api/models.py
-
-
-class BookingDate(models.Model):
-    date = models.DateField()
-    available_slots = models.IntegerField()  # Example field for available slots
-    location = models.CharField(max_length=255)  # Example field for location
-    workshop = models.ForeignKey(
-        'Workshop',  # Reference to the Workshop model
-        on_delete=models.CASCADE,
-        related_name="booking_dates",
-        null=True,  # Temporarily allow null values for this migration
-        blank=True  # Optional: Allow blank values in forms
-    )
-
-    def __str__(self):
-        return f"{self.date} - {self.location}"
-
-
-
-class Workshop(models.Model):
-    title = models.CharField(max_length=200)
-    description = models.TextField()
-    location = models.CharField(max_length=200)
-    available_slots = models.PositiveIntegerField()  # Number of available slots for the workshop
-    date = models.DateField()
-    time = models.TimeField()
-
-    def __str__(self):
-        return f"{self.title} on {self.date} at {self.time}"
-=======
 from .workshops import Workshop
->>>>>>> testing_frontend:backend/api/models/booking.py
 
 
 # models.py
@@ -52,19 +20,6 @@ class WorkshopBooking(models.Model):
     ]
 
     workshop = models.ForeignKey(Workshop, on_delete=models.CASCADE, related_name="bookings")
-<<<<<<< HEAD:backend/api/models.py
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="bookings")
-    title = models.CharField(max_length=50, blank=True, null=True)
-    first_name = models.CharField(max_length=255, default="Anonymous")
-    last_name = models.CharField(max_length=100, blank=True, null=True, default="Anonymous")
-    email = models.EmailField(blank=True, null=True)  # If email is required, add `default="user@example.com"`
-    phone_number = models.CharField(max_length=15, blank=True, null=True, default="0000000000")
-    organization_type = models.CharField(max_length=20, choices=ORGANIZATION_TYPES, default="private")
-    organization_name = models.CharField(max_length=200, blank=True, null=True, default="Not Provided")
-    postcode = models.CharField(max_length=20, blank=True, null=True, default="00000")
-    hear_about_us = models.CharField(max_length=20, choices=HEAR_ABOUT_US_CHOICES, blank=True, null=True, default="other")
-    message = models.TextField(default="No message provided")
-=======
     contact_name = models.CharField(max_length=100)  # Lagt till kontaktpersonens namn
     organization_name = models.CharField(max_length=200, blank=True, null=True)
     organization_type = models.CharField(max_length=20, choices=ORGANIZATION_TYPES)
@@ -72,17 +27,12 @@ class WorkshopBooking(models.Model):
     phone_number = models.CharField(max_length=15)
     number_of_attendees = models.PositiveIntegerField()
     additional_message = models.TextField(blank=True, null=True)
->>>>>>> testing_frontend:backend/api/models/booking.py
     created_at = models.DateTimeField(auto_now_add=True)
     workshop_date = models.DateTimeField()
     is_confirmed = models.BooleanField(default=False)  # Whether the booking has been confirmed
 
     def __str__(self):
-<<<<<<< HEAD:backend/api/models.py
-        return f"Booking for {self.workshop.title} by {self.first_name} {self.last_name}"
-=======
         return f"Booking for {self.workshop.title} by {self.contact_name}"
->>>>>>> testing_frontend:backend/api/models/booking.py
 
     def save(self, *args, **kwargs):
         is_new = self.pk is None  # Check if this is a new booking
