@@ -24,9 +24,15 @@ from .views.booking_views import (
     WorkshopBookingRetrieveUpdateDeleteView,
 )
 
+from .views.blog_views import BlogPostListView, BlogPostDetailView, BlogPostCreateView
+
 urlpatterns = [
 
     path("csrf/", csrf_token_view, name="csrf-token"),
+
+    path('blogs/', BlogPostListView.as_view(), name='blog-list'),
+    path('blogs/<int:pk>/', BlogPostDetailView.as_view(), name='blog-detail'),
+    path('blogs/create/', BlogPostCreateView.as_view(), name='blog-create'),
 
     path("bookings/create/", WorkshopBookingCreateView.as_view(), name="booking-create"),
     path("bookings/", WorkshopBookingListView.as_view(), name="booking-list"),

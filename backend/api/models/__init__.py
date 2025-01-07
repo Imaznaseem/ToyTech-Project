@@ -2,3 +2,4 @@
 
 from .workshops import Workshop
 from .booking import WorkshopBooking
+from .blog import BlogPost

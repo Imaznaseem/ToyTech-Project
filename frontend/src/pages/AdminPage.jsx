@@ -13,7 +13,7 @@ import { fetchWorkshops } from "../api/workshops";
 import { fetchBookings } from "../api/bookings";
 import CreateWorkshopModal from "../components/CreateWorkshopModal";
 import EditWorkshopModal from "../components/EditWorkshopModal";
-import LogoutButton from "../components/Logout"; // Kontrollera sökvägen
+import LogoutButton from "../components/AdminHamburger"; // Kontrollera sökvägen
 import BookingList from "../components/BookingList";
 import CalendarComponent from "../components/CalendarComponent";
 

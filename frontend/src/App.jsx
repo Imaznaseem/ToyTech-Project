@@ -5,11 +5,14 @@ import Login from "./components/Login";
 import Dashboard from "./pages/Dashboard";
 import AdminPage from "./pages/AdminPage";
 import ProtectedRoute from "./components/ProtectedRoutes";
-import { fetchWorkshops } from "./api/workshops"; // Kontrollera sökvägen till din API-funktion
+import { fetchWorkshops } from "./api/workshops";
+import { fetchBlogPosts } from "./api/blogposts"; // Import for fetching blogs
 import ManageWorkshopsPage from "./pages/ManageWorkshopsPage";
+import ManageBlogsPage from "./pages/ManageBlogsPage"; // Import ManageBlogsPage
 
 function App() {
   const [workshops, setWorkshops] = useState([]);
+  const [blogs, setBlogs] = useState([]); // State for blogs
 
   // Funktion för att hämta workshops
   const refreshWorkshops = async () => {
@@ -21,11 +24,21 @@ function App() {
     }
   };
 
-  // Hämta workshops vid laddning av applikationen
+  // Funktion för att hämta bloggar
+  const refreshBlogs = async () => {
+    try {
+      const data = await fetchBlogPosts();
+      setBlogs(data);
+    } catch (error) {
+      console.error("Failed to fetch blogs:", error);
+    }
+  };
+
+  // Hämta workshops och bloggar vid laddning av applikationen
   useEffect(() => {
     refreshWorkshops();
+    refreshBlogs();
   }, []);
-
 
   return (
     <ChakraProvider>
@@ -49,6 +62,7 @@ function App() {
               </ProtectedRoute>
             }
           />
+          
           {/* Hantera Workshops */}
           <Route
             path="/admin/manage-workshops"
@@ -57,6 +71,19 @@ function App() {
                 <ManageWorkshopsPage
                   workshops={workshops}
                   onRefresh={refreshWorkshops}
+                />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Hantera Bloggar */}
+          <Route
+            path="/admin/manage-blogs"
+            element={
+              <ProtectedRoute>
+                <ManageBlogsPage
+                  blogs={blogs}
+                  onRefresh={refreshBlogs}
                 />
               </ProtectedRoute>
             }

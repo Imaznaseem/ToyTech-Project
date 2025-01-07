@@ -71,44 +71,7 @@ const Dashboard = () => {
     >
       <Navbar />
 
-      {/* Floating Sidebar */}
-      <Box
-        position="fixed"
-        top="50%"
-        left="0"
-        transform="translateY(-50%)"
-        zIndex="1000"
-        p="4"
-        display="flex"
-        flexDirection="column"
-        gap="4"
-      >
-        {/* Instagram */}
-        <Link
-          href="https://www.instagram.com/toytech__/"
-          isExternal
-          _hover={{ transform: "scale(1.1)" }}
-        >
-          <Image src={InstagramLogo} alt="Instagram" boxSize="40px" />
-        </Link>
 
-        {/* LinkedIn */}
-        <Link
-          href="https://linkedin.com/company/toytech"
-          isExternal
-          _hover={{ transform: "scale(1.1)" }}
-        >
-          <Image src={LinkedinLogo} alt="LinkedIn" boxSize="40px" />
-        </Link>
-
-        {/* Email */}
-        <Link
-          href="mailto:Ridwan@toytech.se"
-          _hover={{ transform: "scale(1.1)" }}
-        >
-          <Image src="../assets/email.png" alt="Email" boxSize="40px" />
-        </Link>
-      </Box>
 
 {/* Home Section */}
 <Flex
@@ -158,15 +121,7 @@ const Dashboard = () => {
     >
       Boka workshop
     </Button>
-    <Button
-      bg="rgba(10, 158, 226, 0.8)"
-      color="white"
-      _hover={{ bg: "rgba(10, 158, 226, 1)" }}
-      size="lg"
-      onClick={() => console.log("Se galleri klickad")}
-    >
-      Se galleri
-    </Button>
+
   </Flex>
 </Flex>
 
@@ -175,7 +130,7 @@ const Dashboard = () => {
   direction="column"
   align="center"
   justify="center"
-  bg="linear-gradient(180deg, #f9f9f9, #ffffff)" // Bakgrundsgradient
+  bg="white" // #0047FF Bakgrundsgradientlinear-gradient(180deg, #104470 0%, #D3D3D3 100%)
   color="black"
   py={16}
   px={8}
@@ -196,7 +151,7 @@ const Dashboard = () => {
   <Box
     w="80px"
     h="4px"
-    bg="#0A9EE2"
+    bg="black"
     mb={12}
   />
 
@@ -277,7 +232,7 @@ const Dashboard = () => {
       {workshops.map((workshop, index) => (
         <Box
           key={index}
-          bg="white"
+          bg="#23ACE6"
           color="black"
           w={["100%", "300px"]}
           shadow="xl"
@@ -286,17 +241,7 @@ const Dashboard = () => {
           transition="transform 0.3s ease-in-out"
           _hover={{ transform: "scale(1.05)" }}
         >
-          {/* Workshop Main Image */}
-          <Image
-            src={workshop.mainImage} // Replace with the main image path for each workshop
-            alt={workshop.title}
-            w="80px"
-            h="80px"
-            mx="auto"
-            mt={-12}
-            bg="white"
-            borderRadius="full"
-          />
+
 
           {/* Workshop Title */}
           <Heading as="h3" size="md" textAlign="center" py={4}>

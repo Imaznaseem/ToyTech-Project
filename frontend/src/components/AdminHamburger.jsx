@@ -24,6 +24,9 @@ export const LogoutButton = () => {
                 aria-label="Options"
             />
             <MenuList>
+            <MenuItem onClick={() => navigate("/admin/manage-blogs")}>
+                    Hantera Bloggar
+                </MenuItem>
                 <MenuItem onClick={() => navigate("/admin/manage-workshops")}>
                     Hantera Workshops
                 </MenuItem>
