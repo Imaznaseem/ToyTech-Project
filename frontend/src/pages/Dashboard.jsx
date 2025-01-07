@@ -17,6 +17,10 @@ import { fetchWorkshops } from "../api/workshops";
 import BookingModal from "../components/BookingModal";
 import InstagramLogo from "../assets/Instagram.png";
 import LinkedinLogo from "../assets/Linkedin10.png";
+import OwerrLogo from "../assets/Owerr.png";
+import PJKLogo from "../assets/PJK.png";
+import HorizonLogo from "../assets/Horizon.png";
+import LatchLogo from "../assets/Latch.png";
 
 
 const Dashboard = () => {
@@ -184,7 +188,72 @@ const Dashboard = () => {
   </Box>
 </Flex>
 
+<Flex
+  id="partners"
+  direction="column"
+  align="center"
+  justify="center"
+  bg="linear-gradient(180deg, #BDE0FC, #ffffff)" // Bakgrundsgradient
+  color="black"
+  py={16}
+  px={8}
+>
+  {/* Rubrik */}
+  <Heading
+    as="h2"
+    size="lg"
+    fontWeight="bold"
+    textAlign="center"
+    mb={8}
+    fontSize="2xl"
+  >
+    Partners
+  </Heading>
 
+  {/* Divider */}
+  <Box
+    w="80px"
+    h="4px"
+    bg="#0A9EE2"
+    mb={12}
+  />
+  
+  {/* Logotyper */}
+  <Flex
+    wrap="wrap"
+    justify="center"
+    gap={8}
+  >
+    <Image
+      src={LatchLogo} // Byt ut med din partners logotyp
+      alt="Partner 1"
+      w="129px"
+      h="129px"
+      objectFit="cover"
+    />
+    <Image
+      src={HorizonLogo} // Byt ut med din partners logotyp
+      alt="Partner 2"
+      w="129px"
+      h="129px"
+      objectFit="cover"
+    />
+    <Image
+      src={PJKLogo} // Byt ut med din partners logotyp
+      alt="Partner 3"
+      w="129px"
+      h="129px"
+      objectFit="cover"
+    />
+    <Image
+      src={OwerrLogo} // Byt ut med din partners logotyp
+      alt="Partner 4"
+      w="129px"
+      h="129px"
+      objectFit="cover"
+    />
+  </Flex>
+</Flex>
 
 
 {/* Workshops Section */}

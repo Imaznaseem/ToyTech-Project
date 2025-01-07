@@ -26,14 +26,14 @@ const BookingList = ({ title, isConfirmed }) => {
             // 1. Hämta befintlig bokning från servern
             const allBookings = await fetchBookings();
             const existingBooking = allBookings.find((booking) => booking.id === id);
-    
+
             if (!existingBooking) {
                 throw new Error("Booking not found");
             }
-    
+
             // 2. Uppdatera is_confirmed
             const updatedBooking = { ...existingBooking, is_confirmed: true };
-    
+
             // 3. Skicka PUT-anrop med komplett objekt
             await updateBooking(id, updatedBooking);
             loadBookings(); // Ladda om bokningslistan
@@ -61,33 +61,48 @@ const BookingList = ({ title, isConfirmed }) => {
         <VStack align="stretch" spacing={4} mb={8}>
             <Heading size="md" mb={4}>{title}</Heading>
             {bookings.length > 0 ? (
-                bookings.map(booking => (
-                    <Box
-                        key={booking.id}
-                        bg="gray.50"
-                        p={4}
-                        shadow="sm"
-                        borderRadius="md"
-                        cursor="pointer"
-                        onClick={() => openEditModal(booking)}
-                    >
-                        <Text>{booking.contact_name} - {booking.email}</Text>
-                        <Text>Workshop Date: {booking.workshop_date}</Text>
-                        {!isConfirmed && (
-                            <Button
-                                mt={2}
-                                colorScheme="teal"
-                                size="sm"
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleConfirm(booking.id);
-                                }}
-                            >
-                                Confirm
-                            </Button>
-                        )}
-                    </Box>
-                ))
+                bookings.map(booking => {
+                    // Formatera datumet i önskat format
+                    const formattedDate = new Date(booking.workshop_date).toLocaleString("sv-SE", {
+                        year: "numeric",
+                        month: "2-digit",
+                        day: "2-digit",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                    });
+
+                    return (
+                        <Box
+                            key={booking.id}
+                            bg="gray.50"
+                            p={4}
+                            shadow="sm"
+                            borderRadius="md"
+                            cursor="pointer"
+                            onClick={() => openEditModal(booking)}
+                        >
+                            <Text fontWeight="bold" color="teal.700">
+                                Workshop Datum: {formattedDate}
+                            </Text>
+                            <Text fontSize="sm" color="gray.600">
+                                {booking.contact_name} - {booking.email}
+                            </Text>
+                            {!isConfirmed && (
+                                <Button
+                                    mt={2}
+                                    colorScheme="teal"
+                                    size="sm"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleConfirm(booking.id);
+                                    }}
+                                >
+                                    Confirm
+                                </Button>
+                            )}
+                        </Box>
+                    );
+                })
             ) : (
                 <Text>No {isConfirmed ? "confirmed" : "unconfirmed"} bookings available</Text>
             )}

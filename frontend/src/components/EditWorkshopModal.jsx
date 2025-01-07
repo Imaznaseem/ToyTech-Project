@@ -13,12 +13,13 @@ import {
     Input,
     Textarea,
 } from "@chakra-ui/react";
-import { updateWorkshop } from "../api/workshops";
+import { updateWorkshop, deleteWorkshop } from "../api/workshops";
 
-const EditWorkshopModal = ({ isOpen, onClose, workshop }) => {
+const EditWorkshopModal = ({ isOpen, onClose, workshop, onRefresh }) => {
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [loading, setLoading] = useState(false);
+    const [deleting, setDeleting] = useState(false);
 
     useEffect(() => {
         if (workshop) {
@@ -33,6 +34,7 @@ const EditWorkshopModal = ({ isOpen, onClose, workshop }) => {
             await updateWorkshop(workshop.id, JSON.stringify({ title, description }));
             alert("Workshop updated successfully!");
             onClose();
+            onRefresh(); // Uppdatera listan
         } catch (error) {
             console.error("Failed to update workshop:", error);
             alert("Error updating workshop.");
@@ -40,6 +42,23 @@ const EditWorkshopModal = ({ isOpen, onClose, workshop }) => {
             setLoading(false);
         }
     };
+
+    const handleDelete = async () => {
+        if (!window.confirm("Are you sure you want to delete this workshop?")) return;
+        setDeleting(true);
+        try {
+            await deleteWorkshop(workshop.id); // Anropa API:et för att ta bort workshop
+            alert("Workshop deleted successfully!");
+            onClose();
+            onRefresh(); // Uppdatera listan efter borttagning
+        } catch (error) {
+            console.error("Failed to delete workshop:", error);
+            alert("Error deleting workshop.");
+        } finally {
+            setDeleting(false);
+        }
+    };
+
 
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
@@ -72,6 +91,14 @@ const EditWorkshopModal = ({ isOpen, onClose, workshop }) => {
                         isLoading={loading}
                     >
                         Save Changes
+                    </Button>
+                    <Button
+                        colorScheme="red"
+                        onClick={handleDelete}
+                        isLoading={deleting}
+                        ml={3}
+                    >
+                        Delete
                     </Button>
                     <Button variant="ghost" onClick={onClose} ml={3}>
                         Cancel
