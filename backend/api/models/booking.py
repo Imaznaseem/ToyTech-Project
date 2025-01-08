@@ -12,12 +12,6 @@ class WorkshopBooking(models.Model):
         ('company', 'Company'),
         ('private', 'Private Individual'),
     ]
-    HEAR_ABOUT_US_CHOICES = [
-        ('website', 'Website'),
-        ('social_media', 'Social Media'),
-        ('word_of_mouth', 'Word of Mouth'),
-        ('advertisement', 'Advertisement'),
-    ]
 
     workshop = models.ForeignKey(Workshop, on_delete=models.CASCADE, related_name="bookings")
     contact_name = models.CharField(max_length=100)  # Lagt till kontaktpersonens namn
