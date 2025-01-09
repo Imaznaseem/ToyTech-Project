@@ -17,6 +17,11 @@ import { fetchWorkshops } from "../api/workshops";
 import BookingModal from "../components/BookingModal";
 import InstagramLogo from "../assets/Instagram.png";
 import LinkedinLogo from "../assets/Linkedin10.png";
+import OwerrLogo from "../assets/Owerr.png";
+import PJKLogo from "../assets/PJK.png";
+import HorizonLogo from "../assets/Horizon.png";
+import LatchLogo from "../assets/Latch.png";
+import HomeBgImage from "../assets/HomeBild.png";
 
 
 const Dashboard = () => {
@@ -66,122 +71,125 @@ const Dashboard = () => {
     >
       <Navbar />
 
-      {/* Floating Sidebar */}
-      <Box
-        position="fixed"
-        top="50%"
-        left="0"
-        transform="translateY(-50%)"
-        zIndex="1000"
-        p="4"
-        display="flex"
-        flexDirection="column"
-        gap="4"
-      >
-        {/* Instagram */}
-        <Link
-          href="https://www.instagram.com/toytech__/"
-          isExternal
-          _hover={{ transform: "scale(1.1)" }}
-        >
-          <Image src={InstagramLogo} alt="Instagram" boxSize="40px" />
-        </Link>
 
-        {/* LinkedIn */}
-        <Link
-          href="https://linkedin.com/company/toytech"
-          isExternal
-          _hover={{ transform: "scale(1.1)" }}
-        >
-          <Image src={LinkedinLogo} alt="LinkedIn" boxSize="40px" />
-        </Link>
-
-        {/* Email */}
-        <Link
-          href="mailto:Ridwan@toytech.se"
-          _hover={{ transform: "scale(1.1)" }}
-        >
-          <Image src="../assets/email.png" alt="Email" boxSize="40px" />
-        </Link>
-      </Box>
 
 {/* Home Section */}
 <Flex
   id="home"
-  direction={["column", "row"]}
+  direction="column"
   align="center"
-  justify="space-between"
-  bg="linear-gradient(180deg, rgba(0, 0, 35, 0.8), #104470)" // Same gradient background
+  justify="center"
+  bgImage={HomeBgImage} // Lägg in din bild-URL här
+  bgSize="cover"
+  bgPosition="center"
+  bgRepeat="no-repeat"
   color="white"
-  px={[6, 16]}
-  py={[16, 24]} // Increased vertical padding to make the section longer
-  minH="100vh" // Ensure the section spans at least the full viewport height
+  minH="100vh"
+  px={8}
+  py={16}
 >
-  {/* Text Content */}
-  <Box flex="1" display="flex" flexDirection="column" gap={4}>
-    {/* Main Heading */}
-    <Box>
-      <Heading
-        as="h1"
-        size="xl"
-        fontWeight="bold"
-        lineHeight="1.2"
-        mb={4}
-        fontSize={["3xl", "4xl", "5xl"]}
-      >
-        The Next <br />
-        <Text as="span" bgGradient="linear(to-r, #0A9EE2, #51B2F1)" bgClip="text">
-          Generation
-        </Text>{" "}
-        of Workshops
-      </Heading>
-      <Heading
-        as="h2"
-        size="lg"
-        fontWeight="bold"
-        lineHeight="1.2"
-        fontSize={["2xl", "3xl"]}
-      >
-        Inspiring Creative Learning
-      </Heading>
-    </Box>
+  {/* Rubrik */}
+  <Heading
+    as="h1"
+    size="2xl"
+    fontWeight="bold"
+    textAlign="center"
+    textShadow="1px 1px 8px rgba(0, 0, 0, 0.7)"
+    mb={4}
+  >
+    STEM workshops för barn
+  </Heading>
 
-    {/* Description */}
-    <Text maxW="470px" mt={5} fontSize="md" lineHeight="1.6">
-      We are passionate doctor and engineering students offering engaging workshops to inspire young people to explore the world of technology and creativity.
-    </Text>
-  </Box>
+  {/* Underrubrik */}
+  <Text
+    fontSize="xl"
+    textAlign="center"
+    textShadow="1px 1px 5px rgba(0, 0, 0, 0.7)"
+    mb={8}
+  >
+    INSPIRE. CREATE. PLAY.
+  </Text>
 
-  {/* Image Section */}
-  <Box flex="1" position="relative" display="flex" justifyContent="center">
+  {/* Knapp */}
+  <Flex gap={4}>
+    <Button
+      bg="rgba(10, 158, 226, 0.8)"
+      color="white"
+      _hover={{ bg: "rgba(10, 158, 226, 1)" }}
+      size="lg"
+      onClick={() => console.log("Boka workshop klickad")}
+    >
+      Boka workshop
+    </Button>
+
+  </Flex>
+</Flex>
+
+<Flex
+  id="partners"
+  direction="column"
+  align="center"
+  justify="center"
+  bg="white" // #0047FF Bakgrundsgradientlinear-gradient(180deg, #104470 0%, #D3D3D3 100%)
+  color="black"
+  py={16}
+  px={8}
+>
+  {/* Rubrik */}
+  <Heading
+    as="h2"
+    size="lg"
+    fontWeight="bold"
+    textAlign="center"
+    mb={8}
+    fontSize="2xl"
+  >
+    Partners
+  </Heading>
+
+  {/* Divider */}
+  <Box
+    w="80px"
+    h="4px"
+    bg="black"
+    mb={12}
+  />
+
+  {/* Logotyper */}
+  <Flex
+    wrap="wrap"
+    justify="center"
+    gap={8}
+  >
     <Image
-      src="/path-to-hero-image.png" // Replace with the path to your image
-      alt="Interactive Learning"
-      boxSize={["80%", "70%", "100%"]}
-      objectFit="contain"
+      src={LatchLogo} // Byt ut med din partners logotyp
+      alt="Partner 1"
+      w="129px"
+      h="129px"
+      objectFit="cover"
     />
-    {/* Gradient Overlays */}
-    <Box
-      position="absolute"
-      top="0"
-      left="0"
-      w="40%"
-      h="35%"
-      bgGradient="radial(pink.400, transparent)"
-      borderRadius="full"
-      zIndex={0}
+    <Image
+      src={HorizonLogo} // Byt ut med din partners logotyp
+      alt="Partner 2"
+      w="129px"
+      h="129px"
+      objectFit="cover"
     />
-    <Box
-      position="absolute"
-      bottom="10%"
-      right="10%"
-      w="50%"
-      h="50%"
-      bgGradient="radial(blue.300, transparent)"
-      borderRadius="full"
-      zIndex={0}
+    <Image
+      src={PJKLogo} // Byt ut med din partners logotyp
+      alt="Partner 3"
+      w="129px"
+      h="129px"
+      objectFit="cover"
     />
-  </Box>
+    <Image
+      src={OwerrLogo} // Byt ut med din partners logotyp
+      alt="Partner 4"
+      w="129px"
+      h="129px"
+      objectFit="cover"
+    />
+  </Flex>
 </Flex>
 
 
@@ -224,7 +232,7 @@ const Dashboard = () => {
       {workshops.map((workshop, index) => (
         <Box
           key={index}
-          bg="white"
+          bg="#23ACE6"
           color="black"
           w={["100%", "300px"]}
           shadow="xl"
@@ -233,17 +241,7 @@ const Dashboard = () => {
           transition="transform 0.3s ease-in-out"
           _hover={{ transform: "scale(1.05)" }}
         >
-          {/* Workshop Main Image */}
-          <Image
-            src={workshop.mainImage} // Replace with the main image path for each workshop
-            alt={workshop.title}
-            w="80px"
-            h="80px"
-            mx="auto"
-            mt={-12}
-            bg="white"
-            borderRadius="full"
-          />
+
 
           {/* Workshop Title */}
           <Heading as="h3" size="md" textAlign="center" py={4}>

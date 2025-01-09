@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
   Box,
-  Button,
   Flex,
   Heading,
   VStack,
@@ -11,19 +10,22 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { fetchWorkshops } from "../api/workshops";
+import { fetchBookings } from "../api/bookings";
 import CreateWorkshopModal from "../components/CreateWorkshopModal";
 import EditWorkshopModal from "../components/EditWorkshopModal";
-import LogoutButton from '../components/Logout'; // Adjust the path if needed
+import LogoutButton from "../components/AdminHamburger"; // Kontrollera sökvägen
 import BookingList from "../components/BookingList";
+import CalendarComponent from "../components/CalendarComponent";
 
 const AdminPage = () => {
   const [workshops, setWorkshops] = useState([]);
+  const [confirmedBookings, setConfirmedBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedWorkshop, setSelectedWorkshop] = useState(null);
   const { isOpen: isCreateOpen, onOpen: onCreateOpen, onClose: onCreateClose } = useDisclosure();
   const { isOpen: isEditOpen, onOpen: onEditOpen, onClose: onEditClose } = useDisclosure();
 
-  // Fetch workshops from server
+  // Funktion för att hämta workshops
   const refreshWorkshops = async () => {
     setLoading(true);
     try {
@@ -36,8 +38,20 @@ const AdminPage = () => {
     }
   };
 
+  // Funktion för att hämta bekräftade bokningar
+  const refreshConfirmedBookings = async () => {
+    try {
+      const bookings = await fetchBookings();
+      const confirmed = bookings.filter((b) => b.is_confirmed);
+      setConfirmedBookings(confirmed);
+    } catch (error) {
+      console.error("Failed to fetch confirmed bookings:", error);
+    }
+  };
+
   useEffect(() => {
     refreshWorkshops();
+    refreshConfirmedBookings();
   }, []);
 
   const handleEdit = (workshop) => {
@@ -60,11 +74,10 @@ const AdminPage = () => {
       minH="100vh"
       p={4}
       gap={6}
-      w="100vw" // Ensure it spans the full viewport width
-      overflow="hidden" // Prevent horizontal scrolling
+      w="100vw" // Säkerställ fullbredd
+      overflow="hidden" // Förhindra horisontell scroll
     >
-
-      {/* Left Section */}
+      {/* Vänster Sektion */}
       <Box
         flex="2"
         bg="white"
@@ -72,43 +85,53 @@ const AdminPage = () => {
         shadow="md"
         borderRadius="md"
         boxSizing="border-box"
-        maxW="100%" // Prevent content overflow
+        maxW="100%" // Förhindra innehållsöverflöd
       >
-        {/* Header Section */}
-        <Flex
+        {/* Header */}
+        <Box
+          position="fixed"
+          top="0"
+          left="0"
           bg="white"
+          zIndex="1000"
           p={4}
-          shadow="md"
-          borderRadius="md"
-          align="center"
+          boxShadow="lg"
+          display="flex"
+          alignItems="center"
         >
           <LogoutButton />
-        </Flex>
+          <Text ml={4} fontWeight="bold" fontSize="lg" color="teal.700">
+            Välkommen Admin!
+          </Text>
+        </Box>
+
+        <Divider mt={12} />
+
+        <Divider mt={12} />
+
 
         <Heading size="md" mb={4} color="teal.600">
-          Booking Requests
+          Bokningar
         </Heading>
         <VStack align="stretch" spacing={4} mb={8}>
-          {/* Booking Requests */}
           <Box bg="white" p={6} shadow="md" borderRadius="md">
-            <BookingList title="Booking Requests" isConfirmed={false} />
+            <BookingList title="Bokningsförfrågningar" isConfirmed={false} />
           </Box>
         </VStack>
 
         <Divider />
 
         <Heading size="md" mt={8} mb={4} color="teal.600">
-          Upcoming Workshops
+          Kommande Workshops
         </Heading>
         <VStack align="stretch" spacing={4}>
-          {/* Upcoming Workshops */}
           <Box bg="white" p={6} shadow="md" borderRadius="md">
             <BookingList title="Upcoming Workshops" isConfirmed={true} />
           </Box>
         </VStack>
       </Box>
 
-      {/* Right Section */}
+      {/* Höger Sektion */}
       <Box
         flex="3"
         bg="white"
@@ -116,44 +139,13 @@ const AdminPage = () => {
         shadow="md"
         borderRadius="md"
         boxSizing="border-box"
-        maxW="100%" // Prevent content overflow
+        maxW="100%" // Förhindra innehållsöverflöd
       >
-        <Heading size="md" mb={4} color="teal.600">
-          Edit Workshops
-        </Heading>
-        <VStack align="stretch" spacing={4} mb={8}>
-          {workshops.map((workshop) => (
-            <Box
-              key={workshop.id}
-              bg="gray.50"
-              p={4}
-              shadow="sm"
-              borderRadius="md"
-              _hover={{ bg: "gray.100" }}
-            >
-              <Flex justify="space-between" align="center">
-                <Box>
-                  <Heading size="sm">{workshop.title}</Heading>
-                  <Text>{workshop.description}</Text>
-                </Box>
-                <Button
-                  size="sm"
-                  colorScheme="blue"
-                  onClick={() => handleEdit(workshop)}
-                >
-                  Edit
-                </Button>
-              </Flex>
-            </Box>
-          ))}
-        </VStack>
-
-        <Button colorScheme="green" onClick={onCreateOpen} mt={4}>
-          Create New Workshop
-        </Button>
+        {/* Kalenderkomponent */}
+        <CalendarComponent workshops={workshops} confirmedBookings={confirmedBookings} />
       </Box>
 
-      {/* Modals */}
+      {/* Modaler */}
       <CreateWorkshopModal isOpen={isCreateOpen} onClose={onCreateClose} />
       <EditWorkshopModal
         isOpen={isEditOpen}

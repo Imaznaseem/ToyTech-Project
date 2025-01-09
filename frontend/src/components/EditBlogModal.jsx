@@ -13,58 +13,57 @@ import {
     Input,
     Textarea,
 } from "@chakra-ui/react";
-import { updateWorkshop, deleteWorkshop } from "../api/workshops";
+import { updateBlogPost, deleteBlogPost } from "../api/blogposts";
 
-const EditWorkshopModal = ({ isOpen, onClose, workshop, onRefresh }) => {
+const EditBlogModal = ({ isOpen, onClose, blog, onRefresh }) => {
     const [title, setTitle] = useState("");
-    const [description, setDescription] = useState("");
+    const [content, setContent] = useState("");
     const [loading, setLoading] = useState(false);
     const [deleting, setDeleting] = useState(false);
 
     useEffect(() => {
-        if (workshop) {
-            setTitle(workshop.title);
-            setDescription(workshop.description);
+        if (blog) {
+            setTitle(blog.title);
+            setContent(blog.content);
         }
-    }, [workshop]);
+    }, [blog]);
 
     const handleUpdate = async () => {
         setLoading(true);
         try {
-            await updateWorkshop(workshop.id, JSON.stringify({ title, description }));
-            alert("Workshop updated successfully!");
+            await updateBlogPost(blog.id, { title, content });
+            alert("Blog post updated successfully!");
             onClose();
-            onRefresh(); // Uppdatera listan
+            onRefresh(); // Refresh the list
         } catch (error) {
-            console.error("Failed to update workshop:", error);
-            alert("Error updating workshop.");
+            console.error("Failed to update blog post:", error);
+            alert("Error updating blog post.");
         } finally {
             setLoading(false);
         }
     };
 
     const handleDelete = async () => {
-        if (!window.confirm("Are you sure you want to delete this workshop?")) return;
+        if (!window.confirm("Are you sure you want to delete this blog post?")) return;
         setDeleting(true);
         try {
-            await deleteWorkshop(workshop.id); // Anropa API:et för att ta bort workshop
-            alert("Workshop deleted successfully!");
+            await deleteBlogPost(blog.id); // Call API to delete blog post
+            alert("Blog post deleted successfully!");
             onClose();
-            onRefresh(); // Uppdatera listan efter borttagning
+            onRefresh(); // Refresh the list after deletion
         } catch (error) {
-            console.error("Failed to delete workshop:", error);
-            alert("Error deleting workshop.");
+            console.error("Failed to delete blog post:", error);
+            alert("Error deleting blog post.");
         } finally {
             setDeleting(false);
         }
     };
 
-
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
             <ModalContent>
-                <ModalHeader>Edit Workshop</ModalHeader>
+                <ModalHeader>Edit Blog Post</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
                     <FormControl isRequired>
@@ -72,15 +71,15 @@ const EditWorkshopModal = ({ isOpen, onClose, workshop, onRefresh }) => {
                         <Input
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
-                            placeholder="Workshop Title"
+                            placeholder="Blog Post Title"
                         />
                     </FormControl>
                     <FormControl mt={4} isRequired>
-                        <FormLabel>Description</FormLabel>
+                        <FormLabel>Content</FormLabel>
                         <Textarea
-                            value={description}
-                            onChange={(e) => setDescription(e.target.value)}
-                            placeholder="Workshop Description"
+                            value={content}
+                            onChange={(e) => setContent(e.target.value)}
+                            placeholder="Blog Post Content"
                         />
                     </FormControl>
                 </ModalBody>
@@ -109,4 +108,4 @@ const EditWorkshopModal = ({ isOpen, onClose, workshop, onRefresh }) => {
     );
 };
 
-export default EditWorkshopModal;
+export default EditBlogModal;

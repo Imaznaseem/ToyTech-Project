@@ -23,11 +23,19 @@ const WorkshopList = () => {
     }
 
     return (
-        <ul>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "20px" }}>
             {workshops.map((workshop) => (
-                <li key={workshop.id}>{workshop.title}</li>
+                <div key={workshop.id} style={{ border: "1px solid #ddd", padding: "10px", width: "200px" }}>
+                    <img
+                        src={`http://localhost:8000${workshop.image}`} // Kombinera backend URL och bildsökväg
+                        alt={workshop.title}
+                        style={{ width: "100%", height: "auto", borderRadius: "8px" }}
+                    />
+                    <h3>{workshop.title}</h3>
+                    <p>{workshop.description}</p>
+                </div>
             ))}
-        </ul>
+        </div>
     );
 };
 
