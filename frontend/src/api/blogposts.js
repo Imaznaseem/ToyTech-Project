@@ -22,7 +22,9 @@ export const createBlogPost = async (data) => {
         body: data,
     });
     if (!response.ok) {
-        throw new Error("Failed to create blog post");
+        const text = await response.text(); // Läs rå text för felsökning
+        console.error("Error details:", errorDetails); // Logga mer information
+        throw new Error(`Failed to create blog post: ${errorDetails.detail || "Unknown error"}`);
     }
     return response.json();
 };

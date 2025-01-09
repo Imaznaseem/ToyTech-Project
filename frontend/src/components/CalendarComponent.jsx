@@ -33,19 +33,22 @@ const CalendarComponent = ({ workshops, confirmedBookings }) => {
     const hasConfirmedBooking = isConfirmedBooking(date);
 
     return (
-      <Box
-        bg={
-          hasConfirmedBooking
-            ? "green.300"
-            : workshopsForDate.length > 0
-            ? "blue.300"
-            : "gray.100"
-        }
-        border={isToday ? "2px solid teal" : "1px solid gray"}
-        p={2}
-        borderRadius="md"
-        textAlign="center"
-      >
+<Box
+  bg={
+    hasConfirmedBooking
+      ? "green.300"
+      : workshopsForDate.length > 0
+      ? "blue.300"
+      : "gray.100"
+  }
+  border={isToday ? "2px solid teal" : "1px solid gray"}
+  p={2}
+  borderRadius="md"
+  textAlign="center"
+  minWidth="50px" // Mindre celler för mobiler
+  minHeight="50px"
+  fontSize={["xs", "sm"]} // Mindre text på mobiler
+>
         <Text fontWeight="bold">{date.getDate()}</Text>
         {workshopsForDate.map((workshop) => (
           <Text fontSize="sm" key={workshop.id}>
@@ -86,7 +89,7 @@ const CalendarComponent = ({ workshops, confirmedBookings }) => {
 
     return (
       <Box mt={4}>
-        <Grid templateColumns="repeat(8, 1fr)" gap={4}>
+        <Grid templateColumns={["repeat(2, 1fr)", "repeat(8, 1fr)"]} gap={[2, 4]}>
           <Box textAlign="center" fontWeight="bold">Vecka</Box>
           {["Sön", "Mån", "Tis", "Ons", "Tor", "Fre", "Lör"].map((day) => (
             <Box textAlign="center" fontWeight="bold" key={day}>

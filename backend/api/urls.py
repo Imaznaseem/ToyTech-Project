@@ -24,7 +24,12 @@ from .views.booking_views import (
     WorkshopBookingRetrieveUpdateDeleteView,
 )
 
-from .views.blog_views import BlogPostListView, BlogPostDetailView, BlogPostCreateView
+from .views.blog_views import ( 
+    BlogPostListView, 
+    BlogPostDetailView, 
+    BlogPostCreateView, 
+)
+
 
 urlpatterns = [
 

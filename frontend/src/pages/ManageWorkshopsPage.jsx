@@ -58,39 +58,39 @@ const ManageWorkshopsPage = ({ workshops, onRefresh }) => {
           maxW="1240px"
         >
           {workshops.map((workshop, index) => (
-            <Box
-              key={index}
-              bg="white"
-              color="black"
-              w={["100%", "300px"]}
-              shadow="xl"
-              rounded="lg"
-              p={6}
-              transition="transform 0.3s ease-in-out"
-              _hover={{ transform: "scale(1.05)" }}
-            >
-              {/* Workshop Main Image */}
-              <Image
-                src={workshop.mainImage || "/placeholder.png"} // Fallback bild
-                alt={workshop.title}
-                w="80px"
-                h="80px"
-                mx="auto"
-                mt={-12}
-                bg="white"
-                borderRadius="full"
-              />
+        <Box
+          key={index}
+          bg="#23ACE6"
+          color="black"
+          w={["100%", "300px"]}
+          shadow="xl"
+          rounded="lg"
+          p={6}
+          transition="transform 0.3s ease-in-out"
+          _hover={{ transform: "scale(1.05)" }}
+        >
 
-              {/* Workshop Title */}
-              <Heading as="h3" size="md" textAlign="center" py={4}>
-                {workshop.title}
-              </Heading>
 
-              {/* Workshop Description */}
-              <Text textAlign="center" fontSize="sm" fontWeight="medium" mb={6}>
-                {workshop.description}
-              </Text>
+          {/* Workshop Title */}
+          <Heading as="h3" size="md" textAlign="center" py={4}>
+            {workshop.title}
+          </Heading>
 
+          {/* Workshop Description */}
+          <Text textAlign="center" fontSize="sm" fontWeight="medium" mb={6}>
+            {workshop.description}
+          </Text>
+
+          {/* Additional Picture */}
+          <Image
+            src={workshop.secondaryImage} // Replace with the secondary image path
+            alt={`${workshop.title} details`}
+            w="100%"
+            h="150px"
+            objectFit="cover"
+            borderRadius="md"
+            mb={4}
+          />
               {/* Edit Button */}
               <Button
                 bg="blue.500"

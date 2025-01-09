@@ -21,29 +21,35 @@ const CreateBlogModal = ({ isOpen, onClose }) => {
     const [image, setImage] = useState(null);
     const [loading, setLoading] = useState(false);
 
-    const handleCreate = async () => {
-        setLoading(true);
-        const formData = new FormData();
-        formData.append("title", title);
-        formData.append("content", content);
-        if (image) {
-            formData.append("image", image);
+const handleCreate = async () => {
+    setLoading(true);
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("content", content);
+    if (image) {
+        formData.append("image", image);
+    }
+    console.log("FormData content: ", title, content, image); // Logga data
+    try {
+        const response = await createBlogPost(formData);
+        alert("Blog post created successfully!");
+        onClose(); // Close modal
+        setTitle(""); // Reset form
+        setContent("");
+        setImage(null);
+    } catch (error) {
+        if (error.response) {
+            console.error("Server response:", error.response);
+            alert(`Error: ${error.response.data.detail || "Failed to create blog post"}`);
+        } else {
+            console.error("Unexpected error:", error);
+            alert("Unexpected error occurred.");
         }
+    } finally {
+        setLoading(false);
+    }
+};
 
-        try {
-            await createBlogPost(formData);
-            alert("Blog post created successfully!");
-            onClose(); // Close modal
-            setTitle(""); // Reset form
-            setContent("");
-            setImage(null);
-        } catch (error) {
-            console.error("Failed to create blog post:", error);
-            alert("Error creating blog post.");
-        } finally {
-            setLoading(false);
-        }
-    };
 
     return (
         <Modal isOpen={isOpen} onClose={onClose}>

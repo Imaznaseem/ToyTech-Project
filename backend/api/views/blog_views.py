@@ -4,6 +4,7 @@ from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from ..serializers import BlogPostSerializer
 from ..models import BlogPost
+from rest_framework.exceptions import ValidationError
 
 class BlogPostListView(generics.ListAPIView):
     """
@@ -41,6 +42,20 @@ class BlogPostCreateView(generics.CreateAPIView):
     parser_classes = [MultiPartParser, FormParser]  # Support for multipart form data
 
     def perform_create(self, serializer):
+        print("Create method called!")  # Kontrollera att vi når hit
+        # Kontrollera om användaren är administratör
         if not self.request.user.is_staff:
+            print(f"Permission denied for user: {self.request.user}")  # Debug: Log användare
             raise PermissionDenied("Only admins can create blog posts.")
-        serializer.save()
+        
+        # Debug-logg för inkommande data
+        print(f"Request data: {self.request.data}")
+        
+        try:
+            # Försök att spara serializern
+            serializer.save()
+            print("Blog post saved successfully.")  # Debug: Spara lyckades
+        except Exception as e:
+            # Logga eventuella undantag
+            print(f"Error during blog post creation: {e}")
+            raise e

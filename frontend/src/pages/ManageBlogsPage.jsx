@@ -73,12 +73,11 @@ const ManageBlogsPage = ({ blogs, onRefresh }) => {
               <Image
                 src={blog.image || "/placeholder.png"}
                 alt={blog.title}
-                w="80px"
-                h="80px"
-                mx="auto"
-                mt={-12}
-                bg="white"
-                borderRadius="full"
+                w="100%"
+                h="150px"
+                objectFit="cover"
+                borderRadius="md"
+                mb={4}
               />
 
               {/* Blog Title */}
