@@ -8,6 +8,7 @@ import {
   Text,
   Spinner,
   useDisclosure,
+  Button,
 } from "@chakra-ui/react";
 import { fetchWorkshops } from "../api/workshops";
 import { fetchBookings } from "../api/bookings";
@@ -49,6 +50,30 @@ const AdminPage = () => {
     }
   };
 
+  const removePastBookings = async () => {
+    try {
+      const today = new Date().toISOString().split("T")[0]; // Format today's date
+      const pastBookings = confirmedBookings.filter(
+        (booking) => new Date(booking.date) < new Date(today) // Compare dates correctly
+      );
+  
+      if (pastBookings.length === 0) {
+        alert("No bookings for past workshops found!");
+        return;
+      }
+  
+      for (let booking of pastBookings) {
+        await deleteBooking(booking.id); // Delete each booking
+      }
+  
+      alert("All bookings for past workshops have been removed!");
+      refreshConfirmedBookings(); // Refresh the list of confirmed bookings
+    } catch (error) {
+      console.error("Failed to remove past bookings:", error);
+      alert("An error occurred while removing past bookings.");
+    }
+  };
+  
   useEffect(() => {
     refreshWorkshops();
     refreshConfirmedBookings();
@@ -121,29 +146,52 @@ const AdminPage = () => {
 
         <Divider />
 
-        <Heading size="md" mt={8} mb={4} color="teal.600">
-          Kommande Workshops
-        </Heading>
-        <VStack align="stretch" spacing={4}>
-          <Box bg="white" p={6} shadow="md" borderRadius="md">
-            <BookingList title="Upcoming Workshops" isConfirmed={true} />
-          </Box>
-        </VStack>
+        <Heading size="md" mt={8} mb={4} color="teal.600" display="flex" alignItems="center" justifyContent="space-between">
+  Kommande Workshops
+  <Button
+    size="sm"
+    bg="red.500"
+    color="white"
+    _hover={{ bg: "red.600" }}
+    onClick={removePastBookings}
+  >
+    Ta bort gamla bokningar
+  </Button>
+</Heading>
+<VStack align="stretch" spacing={4}>
+  <Box bg="white" p={6} shadow="md" borderRadius="md">
+    <BookingList title="Upcoming Workshops" isConfirmed={true} />
+  </Box>
+</VStack>
       </Box>
 
       {/* Höger Sektion */}
-      <Box
-        flex="3"
-        bg="white"
-        p={6}
-        shadow="md"
-        borderRadius="md"
-        boxSizing="border-box"
-        maxW="100%" // Förhindra innehållsöverflöd
-      >
-        {/* Kalenderkomponent */}
-        <CalendarComponent workshops={workshops} confirmedBookings={confirmedBookings} />
-      </Box>
+{/* Right Section */}
+<Box
+  flex="3"
+  bg="white"
+  p={6}
+  shadow="md"
+  borderRadius="md"
+  boxSizing="border-box"
+  overflowX="auto" // Enable horizontal scrolling
+  maxW="100%" // Prevent overflow
+  whiteSpace="nowrap" // Keep content on a single line for better scrolling
+  css={{
+    scrollBehavior: "smooth", // Enable smooth scrolling
+  }}
+>
+  <Box
+    width={["1200px", "100%", "100%"]} // Set a larger width for smaller screens
+    height={["400px", "600px", "800px"]}
+    mx="auto"
+    p={4}
+    border="1px solid gray"
+  >
+    <CalendarComponent workshops={workshops} confirmedBookings={confirmedBookings} />
+  </Box>
+</Box>
+
 
       {/* Modaler */}
       <CreateWorkshopModal isOpen={isCreateOpen} onClose={onCreateClose} />
