@@ -22,9 +22,12 @@ import PJKLogo from "../assets/PJK.png";
 import HorizonLogo from "../assets/Horizon.png";
 import LatchLogo from "../assets/Latch.png";
 import HomeBgImage from "../assets/HomeBild.png";
+import { fetchBlogPosts } from "../api/blogposts";
+
 
 
 const Dashboard = () => {
+  const [blogs, setBlogs] = useState([]);
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const [workshops, setWorkshops] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -46,6 +49,19 @@ const Dashboard = () => {
 
     loadWorkshops();
   }, []);
+
+useEffect(() => {
+  const loadBlogs = async () => {
+    try {
+      const data = await fetchBlogPosts();
+      setBlogs(data);
+    } catch (error) {
+      console.error("Failed to fetch blog posts:", error);
+    }
+  };
+  loadBlogs();
+}, []);
+
 
   // Open Booking Modal
   const handleBook = (workshop) => {
@@ -299,7 +315,7 @@ const Dashboard = () => {
 {/* About Us Section */}
 <Box
   id="about-us"
-  bg="linear-gradient(180deg, rgba(0, 0, 35, 0.8), #104470)" // Gradient background like Hero section
+  bg="linear-gradient(180deg, rgba(0, 0, 35, 0.8), #104470)"
   py={[12, 16]}
   px={[4, 8]}
   color="white"
@@ -309,59 +325,41 @@ const Dashboard = () => {
     mx="auto"
     gap={8}
     alignItems="center"
-    direction={["column", "row"]} // Stack on smaller screens
+    direction={["column", "row"]}
   >
-    {/* Image Section */}
-    <Image
-      src="/path-to-about-us-image.jpg" // Replace with your image path
-      alt="About Us"
-      className="w-[500px] mx-auto my-4"
-      boxSize={["100%", "500px"]}
-      objectFit="cover"
-      borderRadius="md"
-    />
-
-    {/* Text Section */}
+    {/* Blog Posts Section */}
     <Box flex="1" display="flex" flexDirection="column" justifyContent="center">
-      <Text
-        fontSize="lg"
-        color="#0A9EE2"
-        fontWeight="bold"
-        textTransform="uppercase"
-        mb={2}
-      >
-        Inspiring Future Innovators
-      </Text>
       <Heading
         as="h2"
-        size="xl"
+        size="lg"
         fontWeight="bold"
         mb={4}
         fontSize={["2xl", "3xl", "4xl"]}
       >
-        Passionate Doctor and Engineering Students
+        Latest Blog Posts
       </Heading>
-      <Text fontSize="md" lineHeight="1.6" mb={6}>
-        We are a group of dedicated doctor and engineering students, inspiring
-        young minds to explore STEM fields. Through engaging workshops, we
-        create opportunities for hands-on learning and creativity, empowering
-        the next generation to innovate and thrive in the world of technology.
-      </Text>
-      <Button
-        bg="#0A9EE2"
-        color="white"
-        _hover={{ bg: "#104470" }}
-        w="200px"
-        rounded="md"
-        fontWeight="medium"
-        py={3}
-        mx={["auto", "0"]}
-      >
-        Learn More
-      </Button>
+      <Flex gap={4} wrap="wrap">
+  {blogs.slice(0, 2).map((blog) => (
+    <Box
+      key={blog.id} // Use id field as the unique key
+      border="1px solid #ddd"
+      p={4}
+      borderRadius="md"
+      bg="white"
+      color="black"
+    >
+      <Heading as="h3" size="sm" mb={2}>
+        {blog.title}
+      </Heading>
+      <Text>{blog.content.substring(0, 100)}...</Text>
+    </Box>
+  ))}
+</Flex>
+
     </Box>
   </Flex>
 </Box>
+
 
 
 

@@ -19,7 +19,7 @@ import { Link as ScrollLink } from "react-scroll";
 import logo from "../assets/logo1.png";
 
 const Navbar = () => {
-  const [active, setActive] = useState("Home");
+  const [active, setActive] = useState("");
   const [isScrolled, setIsScrolled] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
@@ -62,31 +62,65 @@ const Navbar = () => {
 
         {/* Desktop Menu */}
         {!isScrolled && (
-          <Flex
-            as="ul"
-            display={["none", "none", "flex"]}
-            gap="30px"
-          >
-            {["Home", "Workshops", "Om oss", "Contact"].map((item, index) => (
-              <ScrollLink
-                key={index}
-                to={item.toLowerCase().replace(" ", "-")}
-                smooth
-                duration={500}
-                offset={-70}
-                onClick={() => setActive(item)}
+          <Flex as="ul" display={["none", "none", "flex"]} gap="30px">
+            <RouterLink to="/">
+              <Button
+                bg="transparent"
+                color="white"
+                _hover={{ bg: "#104470" }}
+                borderRadius="md"
+                px={4}
+                onClick={() => setActive("")} // Avmarkera knappen efter klick
               >
-                <Button
-                  bg={active === item ? "#104470" : "transparent"}
-                  color="white"
-                  _hover={{ bg: "#104470" }}
-                  borderRadius="md"
-                  px={4}
-                >
-                  {item}
-                </Button>
-              </ScrollLink>
-            ))}
+                Home
+              </Button>
+            </RouterLink>
+            <ScrollLink
+              to="boka"
+              smooth
+              duration={500}
+              offset={-70}
+              onClick={() => setActive("")}
+            >
+              <Button
+                bg="transparent"
+                color="white"
+                _hover={{ bg: "#104470" }}
+                borderRadius="md"
+                px={4}
+              >
+                Boka
+              </Button>
+            </ScrollLink>
+            <ScrollLink
+              to="kontakt"
+              smooth
+              duration={500}
+              offset={-70}
+              onClick={() => setActive("")}
+            >
+              <Button
+                bg="transparent"
+                color="white"
+                _hover={{ bg: "#104470" }}
+                borderRadius="md"
+                px={4}
+              >
+                Kontakt
+              </Button>
+            </ScrollLink>
+            <RouterLink to="/om-oss">
+              <Button
+                bg="transparent"
+                color="white"
+                _hover={{ bg: "#104470" }}
+                borderRadius="md"
+                px={4}
+                onClick={() => setActive("")} // Avmarkera knappen efter klick
+              >
+                Om oss
+              </Button>
+            </RouterLink>
           </Flex>
         )}
 
@@ -112,7 +146,7 @@ const Navbar = () => {
           <DrawerContent>
             <DrawerHeader>
               <Flex justifyContent="space-between" alignItems="center">
-                <Text fontSize="lg" fontWeight="bold" color="white">
+                <Text fontSize="lg" fontWeight="bold" color="black">
                   Meny
                 </Text>
                 <CloseButton onClick={toggleDrawer} />
@@ -120,26 +154,38 @@ const Navbar = () => {
             </DrawerHeader>
             <DrawerBody>
               <Flex direction="column" gap={4}>
-                {["Home", "Workshops", "Om oss", "Contact"].map((item, index) => (
-                  <ScrollLink
-                    key={index}
-                    to={item.toLowerCase().replace(" ", "-")}
-                    smooth
-                    duration={500}
-                    offset={-70}
-                    onClick={toggleDrawer}
-                  >
-                    <Button
-                      bg="transparent"
-                      color="black"
-                      _hover={{ bg: "rgba(255, 255, 255, 0.1)" }}
-                      justifyContent="flex-start"
-                      width="full"
-                    >
-                      {item}
-                    </Button>
-                  </ScrollLink>
-                ))}
+                <RouterLink to="/" onClick={toggleDrawer}>
+                  <Button variant="ghost" colorScheme="blue" justifyContent="flex-start">
+                    Home
+                  </Button>
+                </RouterLink>
+                <ScrollLink
+                  to="boka"
+                  smooth
+                  duration={500}
+                  offset={-70}
+                  onClick={toggleDrawer}
+                >
+                  <Button variant="ghost" colorScheme="blue" justifyContent="flex-start">
+                    Boka
+                  </Button>
+                </ScrollLink>
+                <ScrollLink
+                  to="kontakt"
+                  smooth
+                  duration={500}
+                  offset={-70}
+                  onClick={toggleDrawer}
+                >
+                  <Button variant="ghost" colorScheme="blue" justifyContent="flex-start">
+                    Kontakt
+                  </Button>
+                </ScrollLink>
+                <RouterLink to="/om-oss" onClick={toggleDrawer}>
+                  <Button variant="ghost" colorScheme="blue" justifyContent="flex-start">
+                    Om oss
+                  </Button>
+                </RouterLink>
               </Flex>
             </DrawerBody>
           </DrawerContent>

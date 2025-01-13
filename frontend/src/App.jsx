@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 import { ChakraProvider } from "@chakra-ui/react";
 import Login from "./components/Login";
 import Dashboard from "./pages/Dashboard";
+import OmOssPage from "./pages/Om_ossPage";
 import AdminPage from "./pages/AdminPage";
 import ProtectedRoute from "./components/ProtectedRoutes";
 import { fetchWorkshops } from "./api/workshops";
@@ -46,6 +47,7 @@ function App() {
         <Routes>
           {/* Startsidan visar dashboard, tillgänglig för alla */}
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/om-oss" element={<OmOssPage />} />
 
           {/* Admin-login, tillgänglig för alla */}
           <Route
