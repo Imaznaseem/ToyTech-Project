@@ -5,8 +5,8 @@ const CalendarComponent = ({ workshops, confirmedBookings }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(null);
 
-  const [isSmallScreen] = useMediaQuery("(max-width: 872px)");
-  const [isMediumScreen] = useMediaQuery("(min-width: 872px) and (max-width: 1410px)");
+  const [isSmallScreen] = useMediaQuery("(max-width: 480px)");
+  const [isMediumScreen] = useMediaQuery("(min-width: 481px) and (max-width: 1410px)");
 
   const handleMonthChange = (offset) => {
     const newDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + offset);
@@ -18,11 +18,24 @@ const CalendarComponent = ({ workshops, confirmedBookings }) => {
     setCurrentDate(newDate);
   };
 
+  const isConfirmedBooking = (date) => {
+    return confirmedBookings.some(
+      (booking) =>
+        new Date(booking.workshop_date).toDateString() === date.toDateString()
+    );
+  };
+
   const renderDateCell = (date) => {
     const isToday = date.toDateString() === new Date().toDateString();
+    const hasConfirmedBooking = isConfirmedBooking(date);
+
     return (
       <Box
-        bg="gray.100"
+        bg={
+          hasConfirmedBooking
+            ? "green.300"
+            : "gray.100"
+        }
         border={isToday ? "2px solid teal" : "1px solid gray"}
         p={2}
         borderRadius="md"

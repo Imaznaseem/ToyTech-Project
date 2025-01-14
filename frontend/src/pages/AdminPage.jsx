@@ -132,12 +132,7 @@ const AdminPage = () => {
 
         <Divider mt={12} />
 
-        <Divider mt={12} />
-
-
-        <Heading size="md" mb={4} color="teal.600">
-          Bokningar
-        </Heading>
+        {/* Bokningsförfrågningar */}
         <VStack align="stretch" spacing={4} mb={8}>
           <Box bg="white" p={6} shadow="md" borderRadius="md">
             <BookingList title="Bokningsförfrågningar" isConfirmed={false} />
@@ -147,7 +142,6 @@ const AdminPage = () => {
         <Divider />
 
         <Heading size="md" mt={8} mb={4} color="teal.600" display="flex" alignItems="center" justifyContent="space-between">
-  Kommande Workshops
   <Button
     size="sm"
     bg="red.500"
