@@ -1,15 +1,15 @@
 import React, { useState } from "react";
-import { Box, Heading, VStack, Text, Button, Grid } from "@chakra-ui/react";
+import { Box, Heading, Text, Button, Grid, useMediaQuery } from "@chakra-ui/react";
 
 const CalendarComponent = ({ workshops, confirmedBookings }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(null);
 
+  const [isSmallScreen] = useMediaQuery("(max-width: 872px)");
+  const [isMediumScreen] = useMediaQuery("(min-width: 872px) and (max-width: 1410px)");
+
   const handleMonthChange = (offset) => {
-    const newDate = new Date(
-      currentDate.getFullYear(),
-      currentDate.getMonth() + offset
-    );
+    const newDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + offset);
     setCurrentDate(newDate);
   };
 
@@ -18,47 +18,26 @@ const CalendarComponent = ({ workshops, confirmedBookings }) => {
     setCurrentDate(newDate);
   };
 
-  const isConfirmedBooking = (date) => {
-    return confirmedBookings.some(
-      (booking) =>
-        new Date(booking.workshop_date).toDateString() === date.toDateString()
-    );
-  };
-
   const renderDateCell = (date) => {
-    const workshopsForDate = workshops.filter(
-      (workshop) => new Date(workshop.date).toDateString() === date.toDateString()
-    );
     const isToday = date.toDateString() === new Date().toDateString();
-    const hasConfirmedBooking = isConfirmedBooking(date);
-  
     return (
       <Box
-        bg={
-          hasConfirmedBooking
-            ? "green.300"
-            : workshopsForDate.length > 0
-            ? "blue.300"
-            : "gray.100"
-        }
+        bg="gray.100"
         border={isToday ? "2px solid teal" : "1px solid gray"}
         p={2}
         borderRadius="md"
         textAlign="center"
-        minWidth={["35px", "50px", "60px"]} // Smaller for iPhone SE
-        minHeight={["35px", "50px", "60px"]} // Smaller for iPhone SE
-        fontSize={["xs", "sm", "md"]} // Smaller text for iPhone SE
+        minWidth={isSmallScreen ? "40px" : isMediumScreen ? "50px" : "60px"}
+        minHeight={isSmallScreen ? "40px" : isMediumScreen ? "50px" : "60px"}
+        fontSize={isSmallScreen ? "xs" : isMediumScreen ? "sm" : "md"}
+        onClick={() => setSelectedDate(date)}
+        cursor="pointer"
+        _hover={{ bg: "teal.100" }}
       >
         <Text fontWeight="bold">{date.getDate()}</Text>
-        {workshopsForDate.map((workshop) => (
-          <Text fontSize="sm" key={workshop.id}>
-            {workshop.contactPerson || "No contact"}
-          </Text>
-        ))}
       </Box>
     );
   };
-  
 
   const renderCalendarGrid = () => {
     const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
@@ -89,36 +68,32 @@ const CalendarComponent = ({ workshops, confirmedBookings }) => {
     }
 
     return (
-<Box mt={4}>
-      <Grid
-        templateColumns={["repeat(7, 1fr)"]} // Always 7 columns
-        gap={[1, 2, 4]} // Smaller gaps for smaller screens
-      >
-        {["Sön", "Mån", "Tis", "Ons", "Tor", "Fre", "Lör"].map((day) => (
-          <Box textAlign="center" fontWeight="bold" key={day} fontSize={["xs", "sm", "md"]}>
-            {day}
-          </Box>
-        ))}
+      <Box mt={4}>
+        <Grid
+          templateColumns={isSmallScreen ? "repeat(7, 1fr)" : "repeat(7, 1fr)"}
+          gap={isSmallScreen ? 1 : isMediumScreen ? 2 : 4}
+        >
+          {["Sön", "Mån", "Tis", "Ons", "Tor", "Fre", "Lör"].map((day) => (
+            <Text key={day} textAlign="center" fontWeight="bold" fontSize={isSmallScreen ? "xs" : "sm"}>
+              {day}
+            </Text>
+          ))}
         </Grid>
-        {weeks.map((week, weekIndex) => {
-          const firstDateInWeek = week.find((date) => date !== null);
-          return (
-            <Grid templateColumns="repeat(8, 1fr)" gap={4} key={weekIndex}>
-              <Box textAlign="center" fontWeight="bold" borderRadius="md" p={2}>
-                {firstDateInWeek ? Math.ceil((firstDateInWeek - new Date(firstDateInWeek.getFullYear(), 0, 1)) / 86400000 / 7) : ""}
-              </Box>
-              {week.map((date, index) =>
-                date ? (
-                  <Box key={index} onClick={() => setSelectedDate(date)} p={2}>
-                    {renderDateCell(date)}
-                  </Box>
-                ) : (
-                  <Box key={index} />
-                )
-              )}
-            </Grid>
-          );
-        })}
+        {weeks.map((week, weekIndex) => (
+          <Grid
+            templateColumns="repeat(7, 1fr)"
+            gap={isSmallScreen ? 1 : isMediumScreen ? 2 : 4}
+            key={weekIndex}
+          >
+            {week.map((date, index) =>
+              date ? (
+                <Box key={index}>{renderDateCell(date)}</Box>
+              ) : (
+                <Box key={index}></Box>
+              )
+            )}
+          </Grid>
+        ))}
       </Box>
     );
   };

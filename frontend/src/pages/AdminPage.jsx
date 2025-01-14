@@ -9,6 +9,7 @@ import {
   Spinner,
   useDisclosure,
   Button,
+  useMediaQuery,
 } from "@chakra-ui/react";
 import { fetchWorkshops } from "../api/workshops";
 import { fetchBookings } from "../api/bookings";
@@ -25,6 +26,7 @@ const AdminPage = () => {
   const [selectedWorkshop, setSelectedWorkshop] = useState(null);
   const { isOpen: isCreateOpen, onOpen: onCreateOpen, onClose: onCreateClose } = useDisclosure();
   const { isOpen: isEditOpen, onOpen: onEditOpen, onClose: onEditClose } = useDisclosure();
+  const [isSmallScreen] = useMediaQuery("(max-width: 778px)");
 
   // Funktion för att hämta workshops
   const refreshWorkshops = async () => {
@@ -94,23 +96,21 @@ const AdminPage = () => {
 
   return (
     <Flex
-      direction={["column", "row"]}
+      direction={isSmallScreen ? "column" : "row"}
       bg="gray.100"
       minH="100vh"
       p={4}
       gap={6}
-      w="100vw" // Säkerställ fullbredd
-      overflow="hidden" // Förhindra horisontell scroll
+      w="100vw"
+      overflow="hidden"
     >
       {/* Vänster Sektion */}
       <Box
-        flex="2"
+        flex={isSmallScreen ? "none" : "2"}
         bg="white"
         p={6}
         shadow="md"
         borderRadius="md"
-        boxSizing="border-box"
-        maxW="100%" // Förhindra innehållsöverflöd
       >
         {/* Header */}
         <Box
@@ -166,31 +166,19 @@ const AdminPage = () => {
       </Box>
 
       {/* Höger Sektion */}
-{/* Right Section */}
-<Box
-  flex="3"
-  bg="white"
-  p={6}
-  shadow="md"
-  borderRadius="md"
-  boxSizing="border-box"
-  overflowX="auto" // Enable horizontal scrolling
-  maxW="100%" // Prevent overflow
-  whiteSpace="nowrap" // Keep content on a single line for better scrolling
-  css={{
-    scrollBehavior: "smooth", // Enable smooth scrolling
-  }}
->
-  <Box
-    width={["1200px", "100%", "100%"]} // Set a larger width for smaller screens
-    height={["400px", "600px", "800px"]}
-    mx="auto"
-    p={4}
-    border="1px solid gray"
-  >
-    <CalendarComponent workshops={workshops} confirmedBookings={confirmedBookings} />
-  </Box>
-</Box>
+      <Box
+        flex={isSmallScreen ? "none" : "3"}
+        bg="white"
+        p={6}
+        shadow="md"
+        borderRadius="md"
+        mt={isSmallScreen ? 4 : 0} // Flytta kalendern nedanför på små skärmar
+      >
+        <CalendarComponent
+          workshops={workshops}
+          confirmedBookings={confirmedBookings}
+        />
+      </Box>
 
 
       {/* Modaler */}
